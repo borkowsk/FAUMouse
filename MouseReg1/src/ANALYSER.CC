@@ -3,6 +3,8 @@
 #include <string.h>
 #include <math.h>
 #include <values.h>
+#include <assert.h>
+#include <errno.h>
 #ifdef __MSDOS__
 #include <dos.h>
 #ifdef __HUGE__
@@ -20,7 +22,7 @@
 char FileName[128]="nul";//"exper.dat";
 char OutFileName[128]="nul";//"exper.dat";
 char Description[512]="\"Mouse program for Robin Vallacher - dump file\"";
-const char* comment="*";
+int  comment=1;
 long badval=DEFAULT_BAD_VALUE;
 
 struct RegRec{
@@ -51,7 +53,8 @@ return s*s;
 }
 
 struct dist_class
-{ double sum,sumSqr;
+{
+  double sum,sumSqr;
   unsigned N;
 
   dist_class(){sum=sumSqr=N=0;}
@@ -118,14 +121,18 @@ for(i=0;!feof(file);i++)
 	fscanf(file,"%d",     &click);
 	Distance=sqr(centerX-X)+sqr(centerY-Y);
 	if(Distance>0)
-		Distance=sqrt(Distance);
+		Distance=sqrt(Distance);// For all non 0 values
 		else
-		Distance=badval;
+		if(Distance<0)
+			{
+			fprintf(stderr,"Bad distance. Set properly center coordinates (X,Y options).\n");
+			exit(1);
+			}
 	if(Distance>LocalMax)
 		LocalMax=Distance;
 	RegTab[i].time=pTime;
 	RegTab[i].click=click;
-	RegTab[i].distance=Distance;
+	RegTab[i].distance=Distance; // Maybe 0 or great than 0
 	}
 fclose(file);
 #ifdef __MSDOS__
@@ -152,15 +159,17 @@ if((file=fopen(OutFileName,"wt"))==NULL)
 	return;
 	}
 	//else errno=0;
-if(strcmp(comment,"-nc")!=0)
+if(comment!=0)
 	{
 	fprintf(file,"%s [skipped records from 0 to %ld]\n",Description,skip-1);
-	fprintf(file,"\"%s\"\t\"%s\"\t\"%s\"\t\"%s\"\t%s\n","TIME","CLIK","DISTANCE","V(pix/sec)","A(pix/sec^2)");
+	fprintf(file,"\"%s\"\t\"%s\"\t\"%s\"\t\"%s\"\t%s\n","  TIME  ","CLIK","DISTANCE","V(pix/sec)","A(pix/sec^2)");
 	}
 for(long i=skip;i<table_position;i++)
 	{/* Calculations */
 	double  distance=RegTab[i].distance;
 	double deltaT=fabs(RegTab[i].time-RegTab[i-1].time);
+	assert(distance>=0);
+	assert(deltaT>=0);
 	if(deltaT==0)
 		{
 		fprintf(stderr,"WARNING! DeltaT=0 (time)rec %ld & %ld\n",i-1,i);
@@ -171,8 +180,8 @@ for(long i=skip;i<table_position;i++)
 
 	olddistance=distance;
 	olddelta=delta;
-	if(EOF==fprintf(file,"%lf\t%3d\t%lf\t%lf\t%lf\n",
-		RegTab[i].time,RegTab[i].click,distance,delta,deltaDelty))
+	if(EOF==fprintf(file,"%8.3lf\t%3d\t%8.3lf\t%8.3lf\t%10.3lf\n",
+		RegTab[i].time,RegTab[i].click,distance,delta,fabs(deltaDelty)))
 			{
 			perror(OutFileName);
 			exit(errno);
@@ -208,11 +217,12 @@ for(i=start;i<end;i++)
     {/* MIN/MAX searching */
     double  distance=RegTab[i].distance;
     if(distance>LocMaxDist)
-        LocMaxDist=distance;
+	LocMaxDist=distance;
     if(distance<LocMinDist)
-        LocMinDist=distance;
+	LocMinDist=distance;
     }
-fprintf(file,"{%4ld-%4ld}\t",start,end-1);
+if(comment!=0)
+	fprintf(file,"{%4ld-%4ld}\t",start,end-1);
 for(i=start;i<end;i++)
 	{/* Calculations */
 	double  distance=RegTab[i].distance;
@@ -230,44 +240,45 @@ for(i=start;i<end;i++)
 	if(delta==0)/* Gdy predkosc 0 */
 		DistSteady[0]+=deltaT;
 	VeloClasses[0].Register(delta);
-	AcceClasses[0].Register(deltaDelty);
+	AcceClasses[0].Register(fabs(deltaDelty));
 
 	/* Musi dzielic na DIST_CLASS i nie wiecej */
 
     unsigned GroupIndex=(LocMaxDist>LocMinDist?
-                        ((distance-LocMinDist)/
-                        (LocMaxDist-LocMinDist))
-                        *(DIST_CLASS)+1
-                        : 1);
+			((distance-LocMinDist)/
+			(LocMaxDist-LocMinDist))
+			*(DIST_CLASS)+1
+			: 1);
 
 	DistClasses[GroupIndex].Register(distance);
 	if(delta==0)/* Gdy predkosc 0 */
 		DistSteady[GroupIndex]+=deltaT;
 	VeloClasses[GroupIndex].Register(delta);
-	AcceClasses[GroupIndex].Register(deltaDelty);
+	AcceClasses[GroupIndex].Register(fabs(deltaDelty));
 	}
 
-if(EOF==fprintf(file,"%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t",
+if(EOF==fprintf(file,"%8.3lf\t%8.3lf\t%8.3lf\t%8.3lf\t%10.3lf\t%10.3lf\t",
 	    DistClasses[0].Mean(),DistClasses[0].Sigma(),
 	    VeloClasses[0].Mean(),VeloClasses[0].Sigma(),
-	    AcceClasses[0].Mean(),AcceClasses[0].Sigma()))
+	    AcceClasses[0].Mean(),AcceClasses[0].Sigma() ))
 		{
 		perror(OutFileName);
 		exit(errno);
 		}
 for(int j=1;j<=DIST_CLASS;j++)
-    if(EOF==fprintf(file," %4u\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t",
+    if(EOF==fprintf(file," %5u\t%8.3lf\t%8.3lf\t%8.3lf\t%8.3lf\t%10.3lf\t%10.3lf\t",
 	    DistClasses[j].N,
 	    DistClasses[j].Mean(),DistClasses[j].Sigma(),
 	    VeloClasses[j].Mean(),VeloClasses[j].Sigma(),
-	    AcceClasses[j].Mean(),AcceClasses[j].Sigma()))
+	    AcceClasses[j].Mean(),AcceClasses[j].Sigma() ))
 		{
 		perror(OutFileName);
 		exit(errno);
 		}
-fprintf(file,"[%lf]\t",fabs(RegTab[start].time-RegTab[start+1].time)*krok);
+if(comment!=0)
+	fprintf(file,"[%8.3lf]\t",fabs(RegTab[start].time-RegTab[start+1].time)*krok);
 for(int l=0;l<=DIST_CLASS;l++)
-	if(EOF==fprintf(file,"%lf\t",DistSteady[l]))
+	if(EOF==fprintf(file,"%8.3lf\t",DistSteady[l]))
 		{
 		perror(OutFileName);
 		exit(errno);
@@ -285,7 +296,7 @@ if((file=fopen(OutFileName,"wt"))==NULL)
 	return;
 	}
 skip+=(table_position-skip)-groups*krok;
-if(strcmp(comment,"-nc")!=0)
+if(comment!=0)
     {
     if(skip==0)
     fprintf(file,"%s [no skipped records]\n",Description);
@@ -310,6 +321,11 @@ void ZmienEXT(char* Name,const char* ext)
 /* Podmienia rozszerzenie nazwy. Zaklada ze starczy miejsca! */
 {
 char* pos=strrchr(Name,'.');
+printf(
+"\nANALYSER FOR DATA OBTAINED WITHIN MOUSE PARADIGM.\n"
+"Programmed by Wojciech Borkowski under direction of \n"
+"Andrzej Nowak & Robin Vallacher (VERSION %s)\n",__DATE__);
+
 if(pos==NULL)
 	{
 	pos=Name+strlen(Name);
@@ -319,7 +335,7 @@ pos++; // Pozycja za kropka
 strcpy(pos,ext);
 }
 
-main(int argc,char* argv[])
+int main(int argc,char* argv[])
 {
 long skipval=0;
 int groups=3;
@@ -332,7 +348,8 @@ if(argc<2)
 	printf("would change extension to .dat \n");
 	printf("Options are:\n");
         printf("[-r ] - make raw output file\n");
-	printf("[-nc] - optional \"non comment\" swich\n");
+	printf("[-nc] - optional \"non comment\" swich that\n");
+	printf("remove text and GROUP and WHOLE TIME column\n");
 	printf("[-bN] - bad value marker (default -99)\n");
 	printf("[-XN] - target position X (default 320)\n");
 	printf("[-YN] - target position Y (default 240)\n");
@@ -358,7 +375,7 @@ if(argc<2)
 		}
 	for(int i=first_opt;argv[i]!=NULL;i++) /* Parse parameters */
 		switch(argv[i][1]){
-		case 'n':comment="-nc";break;
+		case 'n':comment=0;break;
 		case 'b':badval=atol(argv[i]+3);break;
 		case 's':skipval=atol(argv[i]+3);break;
                 case 'r':extract=0;break;
@@ -368,7 +385,7 @@ if(argc<2)
 		case 'D':FixMaxDistance=atol(argv[i]+3)+1;break;
 		case 'c':DIST_CLASS=atol(argv[i]+3);break;
 		}
-	printf("\nI AM WORKING!\n");
+	printf("\n W A I T !\n");
 	}
 LoadFileAction();
 if(extract==1)
