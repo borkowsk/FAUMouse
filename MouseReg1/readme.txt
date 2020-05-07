@@ -1,2 +1,2 @@
 First version was for DOS!
-(programmed around 1995)
+Project started around 1995
