@@ -2,20 +2,26 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <values.h>
 #ifdef __MSDOS__
 #include <dos.h>
+#ifdef __HUGE__
+#define huge
+#define far
+#endif
 #endif
 #ifdef unix
 #define __HUGE__
 #define huge
 #define far
 #endif
-
+#define DEFAULT_BAD_VALUE  (-99)
 /* User interface tu module */
 char FileName[128]="nul";//"exper.dat";
 char OutFileName[128]="nul";//"exper.dat";
 char Description[512]="\"Mouse program for Robin Vallacher - dump file\"";
 const char* comment="*";
+long badval=DEFAULT_BAD_VALUE;
 
 struct RegRec{
 	double time;
@@ -26,26 +32,22 @@ struct RegRec{
 
 #if defined( __HUGE__ ) || defined ( __LARGE__ )
 #define MAX_DATA_POINTS (10L*60L*30L)
-RegRec huge RegTabMem[MAX_DATA_POINTS];
+RegRec huge  RegTabMem[MAX_DATA_POINTS];
 RegRec huge* RegTab=RegTabMem;
 #else
 RegRec far RegTab[4095];
 #endif
 
-unsigned long position;
+unsigned long table_position;
 int DIST_CLASS=2;
 double centerX=640/2,centerY=480/2;/* ASSUMED VGA SCREEN DIMENSIONS !!! */
 double MAX_DIST=sqrt(320*320L+240*240L)+1;
 double FixMaxDistance=0;
 
-double sqr(double s)/* Wygodny kwadrat */
+double Sigma(double sum,double sumSqr,unsigned N);
+inline double sqr(double s)/* Wygodny kwadrat */
 {
 return s*s;
-}
-
-double Sigma(double sum,double sumSqr,unsigned N)
-{
-return sqrt(   ( sumSqr- (sum*sum)/N )  /  (N-1)  );
 }
 
 struct dist_class
@@ -59,14 +61,14 @@ struct dist_class
   if(N>=1)
 	return sum/N;
 	else
-	return -99;
+	return badval;
   }
   double Sigma()
   {
   if(N>=2)
 	return ::Sigma(sum,sumSqr,N);
 	else
-	return -99;
+	return badval;
   }
 };
 
@@ -77,12 +79,25 @@ void dist_class::Register(double Distance)
  N++;
 }
 
+double Sigma(double sum,double sumSqr,unsigned N)
+{
+const double dokladnosc=0.001;// Wielokrotne dodawanie kwadratow gubi dokladnosc
+//double pom=  (  sumSqr/N - sqr(sum/N)  );
+double pom=  ( sumSqr - sqr(sum)/N  )/  (N-1) ;
+if(pom<-dokladnosc)
+	return badval;
+if(pom>0)
+	return sqrt( pom );
+	else
+	return 0;
+}
+
 void LoadFileAction()
 {
 FILE *file;
 char bufor[512];
 long i;
-double LocalMax=0;
+double LocalMax=-9999;
 
 if((file=fopen(FileName,"rt"))==NULL)
 	{
@@ -102,7 +117,10 @@ for(i=0;!feof(file);i++)
 	fscanf(file,"%le",    &pTime);
 	fscanf(file,"%d",     &click);
 	Distance=sqr(centerX-X)+sqr(centerY-Y);
-	Distance=sqrt(Distance);
+	if(Distance>0)
+		Distance=sqrt(Distance);
+		else
+		Distance=badval;
 	if(Distance>LocalMax)
 		LocalMax=Distance;
 	RegTab[i].time=pTime;
@@ -111,9 +129,9 @@ for(i=0;!feof(file);i++)
 	}
 fclose(file);
 #ifdef __MSDOS__
-i--; /* \r\n secwention make error-behavior of feof() */
+i--; /* \r\n sequention make error-behavior of feof() */
 #endif
-position=i;
+table_position=i;
 if(FixMaxDistance!=0)
 	MAX_DIST=FixMaxDistance;
 	else
@@ -139,7 +157,7 @@ if(strcmp(comment,"-nc")!=0)
 	fprintf(file,"%s [skipped records from 0 to %ld]\n",Description,skip-1);
 	fprintf(file,"\"%s\"\t\"%s\"\t\"%s\"\t\"%s\"\t%s\n","TIME","CLIK","DISTANCE","V(pix/sec)","A(pix/sec^2)");
 	}
-for(long i=skip;i<position;i++)
+for(long i=skip;i<table_position;i++)
 	{/* Calculations */
 	double  distance=RegTab[i].distance;
 	double deltaT=fabs(RegTab[i].time-RegTab[i-1].time);
@@ -167,10 +185,14 @@ fclose(file);
 void DumpGroup(FILE* file,long start,long krok)
 {
 const MXCLAS=12;
+long  end=start+krok;
+long    i=0;
 dist_class DistClasses[MXCLAS];
 double     DistSteady[MXCLAS];
 dist_class VeloClasses[MXCLAS];
 dist_class AcceClasses[MXCLAS];
+double LocMinDist=MAXINT; // Najmniejsza odleglosc od trrget w grupie - do ustawienia
+double LocMaxDist=0;      // Najwieksza odleglosc od target w grupie - do ustawienia
 
 double olddelta=0,olddistance=0;
 for(int k=0;k<MXCLAS;k++)
@@ -182,8 +204,16 @@ if(start>0)
 	olddistance=RegTab[0].distance;
 	start=1;
 	}
-fprintf(file,"(%4ld-%4ld)\t",start,start+krok-1);
-for(long i=start;i<start+krok;i++)
+for(i=start;i<end;i++)
+    {/* MIN/MAX searching */
+    double  distance=RegTab[i].distance;
+    if(distance>LocMaxDist)
+        LocMaxDist=distance;
+    if(distance<LocMinDist)
+        LocMinDist=distance;
+    }
+fprintf(file,"{%4ld-%4ld}\t",start,end-1);
+for(i=start;i<end;i++)
 	{/* Calculations */
 	double  distance=RegTab[i].distance;
 	double deltaT=fabs(RegTab[i].time-RegTab[i-1].time);
@@ -203,7 +233,12 @@ for(long i=start;i<start+krok;i++)
 	AcceClasses[0].Register(deltaDelty);
 
 	/* Musi dzielic na DIST_CLASS i nie wiecej */
-	unsigned GroupIndex=(distance/MAX_DIST)*(DIST_CLASS)+1;
+
+    unsigned GroupIndex=(LocMaxDist>LocMinDist?
+                        ((distance-LocMinDist)/
+                        (LocMaxDist-LocMinDist))
+                        *(DIST_CLASS)+1
+                        : 1);
 
 	DistClasses[GroupIndex].Register(distance);
 	if(delta==0)/* Gdy predkosc 0 */
@@ -221,7 +256,7 @@ if(EOF==fprintf(file,"%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t",
 		exit(errno);
 		}
 for(int j=1;j<=DIST_CLASS;j++)
-	if(EOF==fprintf(file,"(%4u)\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t",
+    if(EOF==fprintf(file," %4u\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t",
 	    DistClasses[j].N,
 	    DistClasses[j].Mean(),DistClasses[j].Sigma(),
 	    VeloClasses[j].Mean(),VeloClasses[j].Sigma(),
@@ -242,16 +277,19 @@ fprintf(file,"\n");
 
 void MakeExtractFile(long skip,long groups)
 {
+long krok=(table_position-skip)/groups;
 FILE *file;
 if((file=fopen(OutFileName,"wt"))==NULL)
 	{
 	perror("Fatal! Can't store data! \7\7\7");
 	return;
 	}
-long krok=(position-skip)/groups;
-skip+=(position-skip)-groups*krok;
+skip+=(table_position-skip)-groups*krok;
 if(strcmp(comment,"-nc")!=0)
-	{
+    {
+    if(skip==0)
+    fprintf(file,"%s [no skipped records]\n",Description);
+	else
 	fprintf(file,"%s [skipped records from 0 to %ld]\n",Description,skip-1);
 	fprintf(file,"\"%s\"\t\"%s\"\t\"%s\"\t\"%s\"\t\"%s\"\t\"%s\"\t\"%s\"\t",
 		"G R O U P"," M.DIST  ","   SD    ","M.V(pix/s)","   SD    ","M.A(pix/s^2)","   SD   ");
@@ -259,39 +297,71 @@ if(strcmp(comment,"-nc")!=0)
 		fprintf(file,"\"%s%u\"\t\"%s\"\t\"%s\"\t\"%s\"\t\"%s\"\t\"%s\"\t\"%s\"\t",
 		"SUB:",j+1,"{ M.DIST","   SD   ","M.V(pix/s)","   SD   ","M.A(pix/s^2)","   SD  }");
 	fprintf(file,"\"WHOLE TIME\"\t\"REST TIME\"\t\"<-REST TIME FOR DISTANCE GROUPS->\"\t\n");
-	}
+    }
 errno=0;
-for(long i=0;i<groups;i++)
-	DumpGroup(file,skip+i*krok,krok);
+DumpGroup(file,skip,groups*krok);
+if(groups>=2)
+  for(long i=0;i<groups;i++)
+    DumpGroup(file,skip+i*krok,krok);
 fclose(file);
+}
+
+void ZmienEXT(char* Name,const char* ext)
+/* Podmienia rozszerzenie nazwy. Zaklada ze starczy miejsca! */
+{
+char* pos=strrchr(Name,'.');
+if(pos==NULL)
+	{
+	pos=Name+strlen(Name);
+	*pos='.';
+	}
+pos++; // Pozycja za kropka
+strcpy(pos,ext);
 }
 
 main(int argc,char* argv[])
 {
 long skipval=0;
-int groups=0;
+int groups=3;
 int extract=1;
-if(argc<3)
+int first_opt=2;
+if(argc<2)
 	{
-	fprintf(stderr,"USAGE: %s infile outfile [ options ]\n\n",argv[0]);
-	fprintf(stderr,"When options are:\n");
-	fprintf(stderr,"[-nc] - optional \"non comment\" swich\n");
-	fprintf(stderr,"[-XN] - target position X (default 320)\n");
-	fprintf(stderr,"[-YN] - target position Y (default 240)\n");
-	fprintf(stderr,"[-DN] - fix max distance\n");
-	fprintf(stderr,"[-skN] - skip first N records\n");
-	fprintf(stderr,"[-exN ] - extract to N time groups\n");
-	fprintf(stderr,"[-cN] - number of distance groups (default 2)\n");
+	printf("USAGE:\n\t %s infile [outfile] [ options ]\n\n",argv[0]);
+	printf("When outfile is optional. If do`t exist, program\n");
+	printf("would change extension to .dat \n");
+	printf("Options are:\n");
+        printf("[-r ] - make raw output file\n");
+	printf("[-nc] - optional \"non comment\" swich\n");
+	printf("[-bN] - bad value marker (default -99)\n");
+	printf("[-XN] - target position X (default 320)\n");
+	printf("[-YN] - target position Y (default 240)\n");
+	printf("[-DN] - fix max distance\n");
+	printf("[-skN] - skip first N records\n");
+	printf("[-exN ] - extract to N time groups\n");
+	printf("[-cN] - number of distance groups (default 2)\n");
 	exit(1);
 	}
 	else
 	{
 	strcpy(FileName,argv[1]);
-	strcpy(OutFileName,argv[2]);
-	for(int i=3;argv[i]!=NULL;i++) /* Parse parameters */
+	if(argv[2]!=NULL && argv[2][0]!='-') // Jest nazwa pliku wyjsciowego
+		{
+		strcpy(OutFileName,argv[2]);
+		first_opt=3;
+		}
+		else        // Brak nazwy pliku wyjsciowego
+		{	    // treba zbudowac
+		strcpy(OutFileName,argv[1]);
+		ZmienEXT(OutFileName,"dat");
+		first_opt=2;
+		}
+	for(int i=first_opt;argv[i]!=NULL;i++) /* Parse parameters */
 		switch(argv[i][1]){
 		case 'n':comment="-nc";break;
+		case 'b':badval=atol(argv[i]+3);break;
 		case 's':skipval=atol(argv[i]+3);break;
+                case 'r':extract=0;break;
 		case 'e':extract=1;groups=atoi(argv[i]+3);break;
 		case 'X':centerX=atol(argv[i]+3);break;
 		case 'Y':centerY=atol(argv[i]+3);break;
