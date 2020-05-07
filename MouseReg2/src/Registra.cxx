@@ -3,6 +3,8 @@
 #include <math.h>
 #include <malloc.h>
 
+#define huge //stiupid keyword
+
 struct RegRec{
 	double time;
 	short int click;
