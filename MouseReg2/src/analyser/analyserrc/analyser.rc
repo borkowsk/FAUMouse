@@ -13,13 +13,66 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Polish resources
+// Neutral (Default) resources
 
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_PLK)
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUD)
 #ifdef _WIN32
-LANGUAGE LANG_POLISH, SUBLANG_DEFAULT
-#pragma code_page(1250)
+LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
+#pragma code_page(1252)
 #endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOG_ABOUT DIALOGEX 0, 0, 333, 282
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About THE MOUSE PARADIGM 2004 package"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",1,149,252,50,14
+    CTEXT           " (c) Version 2004 BETA (3.5b)",IDC_STATIC,115,51,109,12
+    CONTROL         103,112,"Static",SS_BITMAP | SS_CENTERIMAGE | 
+                    SS_REALSIZEIMAGE,62,223,58,54,WS_EX_TRANSPARENT
+    CONTROL         102,110,"Static",SS_BITMAP | SS_CENTERIMAGE | 
+                    SS_REALSIZEIMAGE,269,223,58,54,WS_EX_TRANSPARENT
+    CTEXT           "The Mouse Paradigm:",IDC_STATIC,40,15,264,11
+    CONTROL         106,IDC_STATIC,"Static",SS_BITMAP,5,222,55,55
+    LTEXT           "A Method for the Collection and Analysis of Self-Report Time Series Data",
+                    IDC_STATIC,59,34,229,8
+    LTEXT           "Designed by:",IDC_STATIC,152,73,42,8
+    CTEXT           "Andrzej Nowak             Robin R. Vallacher",
+                    IDC_STATIC,103,92,134,8
+    CTEXT           "Warsaw University                 Florida Atlantic University",
+                    IDC_STATIC,88,108,172,8
+    CTEXT           "Programmed by: Wojciech Borkowski Warsaw University",
+                    IDC_STATIC,135,129,67,34
+    LTEXT           "Consult the licence.pdf in the package directory!",
+                    IDC_STATIC,97,172,153,8
+    CTEXT           "By clicking the OK button, the user indicates that he or she has read and agreed to these conditions.",
+                    IDC_STATIC,73,188,194,26
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_DIALOG_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 5
+        RIGHTMARGIN, 327
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 277
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
 
 #ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
@@ -28,8 +81,8 @@ LANGUAGE LANG_POLISH, SUBLANG_DEFAULT
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,1,0,0
- PRODUCTVERSION 3,0,0,0
+ FILEVERSION 3,51,0,0
+ PRODUCTVERSION 2004,0,3,51
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x2bL
@@ -42,31 +95,52 @@ VS_VERSION_INFO VERSIONINFO
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK "000004e4"
+        BLOCK "041504e2"
         BEGIN
-            VALUE "Comments", "Thirt complete version. For evaluate only\0"
-            VALUE "CompanyName", "Wojciech T. Borkowski\0"
-            VALUE "FileDescription", "Mouse movement analyser\0"
-            VALUE "FileVersion", "Version 3.1\0"
-            VALUE "InternalName", "analyser\0"
-            VALUE "LegalCopyright", "Copyright © 1999 Wojciech T. Borkowski\0"
-            VALUE "LegalTrademarks", "ISS UW\0"
-            VALUE "OriginalFilename", "analyser.exe\0"
-            VALUE "PrivateBuild", "For Robin Vallacher & students only\0"
-            VALUE "ProductName", "MouseAna\0"
-            VALUE "ProductVersion", "Version 3.1\0"
-            VALUE "SpecialBuild", "Local ISS use only!!!\0"
+            VALUE "Comments", "Programmed by: Wojciech Borkowski, Warsaw University\0"
+            VALUE "CompanyName", "Warsaw University & Florida Atlantic University\0"
+            VALUE "FileDescription", "Mouse paradigm package\0"
+            VALUE "FileVersion", "Version 2004 BETA (3.5b)\0"
+            VALUE "InternalName", "MouseParAnalyser\0"
+            VALUE "LegalCopyright", "Copyright © ISS UW & FAU 1996,1997,1998,2002,2004\0"
+            VALUE "LegalTrademarks", "Microsoft® is a registered trademark of Microsoft Corporation. Windows(TM) is a trademark of Microsoft Corporation\0"
+            VALUE "OriginalFilename", "Analyser\0"
+            VALUE "PrivateBuild", "FOR TESTING\0"
+            VALUE "ProductName", "Mouse Paradigm 2004\0"
+            VALUE "ProductVersion", "Version 2004 (v. 3 release 0.51)\0"
+            VALUE "SpecialBuild", "FOR TESTING\0"
         END
     END
     BLOCK "VarFileInfo"
     BEGIN
-        VALUE "Translation", 0x0, 1252
+        VALUE "Translation", 0x415, 1250
     END
 END
 
 #endif    // !_MAC
 
-#endif    // Polish resources
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+101                     ICON    DISCARDABLE     "ANALYSER.ICO"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_APPNAME             "Analyser"
+    IDS_DESCRIPTION         "Mouse Paradigm Analyser"
+END
+
+#endif    // Neutral (Default) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -107,12 +181,12 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Icon
+// Bitmap
 //
 
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDI_ICON1               ICON    DISCARDABLE     "Rejestr.ico"
+IDB_BITMAP2             BITMAP  DISCARDABLE     "iss_sign.bmp"
+IDB_BITMAP3             BITMAP  DISCARDABLE     "uw_logo.bmp"
+IDB_BITMAP1             BITMAP  DISCARDABLE     "fau_logo.bmp"
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
