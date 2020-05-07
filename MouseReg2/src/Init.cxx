@@ -23,12 +23,15 @@
 #include "globals.h"            // prototypes specific to this application
 #include "resource.h"
 
-HINSTANCE hInst;                // current instance
+HINSTANCE WB_Instance=0;                // current instance
+HINSTANCE hInst=0;
+HANDLE    WB_Hwnd=0;					// current main
 
 char szAppName[9];              // The name of this application
 char szTitle[40];               // The title bar text
 
-int ScreenX,ScreenY;
+static int ScreenX;
+static int ScreenY;
 
 //
 //  FUNCTION: InitApplication(HINSTANCE)
@@ -66,7 +69,7 @@ BOOL InitApplication(HINSTANCE hInstance)
     #endif
 
     // Load the application name and description strings.
-
+	WB_Instance=hInstance;
     LoadString(hInstance, IDS_APPNAME, szAppName, sizeof(szAppName));
     LoadString(hInstance, IDS_DESCRIPTION, szTitle, sizeof(szTitle));
 
@@ -149,15 +152,17 @@ BOOL InitApplication(HINSTANCE hInstance)
 //    In this case, we save the instance handle in a static variable and
 //    create and display the main program window.
 //
+#ifdef _DEBUG
+#define WINDOW_STYLE	(WS_OVERLAPPEDWINDOW | WS_MAXIMIZE)
+#else
+#define WINDOW_STYLE	(WS_OVERLAPPED | WS_MAXIMIZE) 				
+#endif
 
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    
 	HWND    hwnd; // Main window handle.
-	HDC		EkranDc=GetDC(0);
-	ScreenX=GetDeviceCaps(EkranDc,HORZRES);
-	ScreenY=GetDeviceCaps(EkranDc,VERTRES);
-	ReleaseDC(0,EkranDc);
+
 	
 	// Save the instance handle in static variable, which will be used in
     // many subsequence calls from this application to Windows.
@@ -167,9 +172,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     // Create a main window for this application instance.
     hwnd = CreateWindow(szAppName,           // See RegisterClass() call.
 						szTitle,             // Text for window title bar.
-						//WS_OVERLAPPED|
-						WS_OVERLAPPEDWINDOW |
-						WS_MAXIMIZE ,
+						WINDOW_STYLE,
                         0, 0,    
                         ScreenX, ScreenY,   
 						//CW_USEDEFAULT,0,
@@ -181,6 +184,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     // If window could not be created, return "failure"
     if (!hwnd)
         goto F_ERROR;
+
+	WB_Hwnd=hwnd;/*Save to global varaiable */
 
     //
     // **TODO** Call module specific instance initialization functions here.
