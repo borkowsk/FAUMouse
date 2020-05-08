@@ -2,7 +2,7 @@ program Starter;
 
 uses
   Forms,
-  main in 'main.pas' {Form1},
+  main in 'main.pas' {MainForm},
   tlo in 'tlo.pas' {TloForm},
   Instruction in 'Instruction.pas' {InstructionForm};
 
@@ -11,7 +11,7 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TMainForm, MainForm);
   Application.CreateForm(TTloForm, TloForm);
   Application.CreateForm(TInstructionForm, InstructionForm);
   Application.Run;

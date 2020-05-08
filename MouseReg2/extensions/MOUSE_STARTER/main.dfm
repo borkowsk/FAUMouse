@@ -1,4 +1,4 @@
-﻿object Form1: TForm1
+﻿object MainForm: TMainForm
   Left = 0
   Top = 0
   Caption = 'Start badania'
@@ -11,6 +11,8 @@
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poDesktopCenter
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -142,7 +144,7 @@
     ParentFont = False
     TabOrder = 5
   end
-  object Button1: TButton
+  object StartButton: TButton
     Left = 8
     Top = 118
     Width = 380
@@ -155,6 +157,6 @@
     Font.Style = []
     ParentFont = False
     TabOrder = 6
-    OnClick = Button1Click
+    OnClick = StartButtonClick
   end
 end

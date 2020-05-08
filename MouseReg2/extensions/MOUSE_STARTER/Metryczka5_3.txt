@@ -1,0 +1,2 @@
+#	Grupa	Badany	P³eæ	Wiek	Czas
+AZ+LBW	5	3		99	2013-10-25 15:45:33
