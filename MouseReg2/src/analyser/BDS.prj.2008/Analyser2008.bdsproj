@@ -1,0 +1,364 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <PersonalityInfo>
+    <Option>
+      <Option Name="Personality">CPlusPlusBuilder.Personality</Option>
+      <Option Name="ProjectType">CppConsoleApplication</Option>
+      <Option Name="Version">1.0</Option>
+      <Option Name="GUID">{428517F5-23D5-4D24-AE86-DB29D764EF62}</Option>
+    </Option>
+  </PersonalityInfo>
+  <CPlusPlusBuilder.Personality>
+    <Source>
+      <Source Name="MainSource">Analyser2008.bpf</Source>
+    </Source>
+    <BCBPROJECT>
+      <project version="10.0">
+        <property category="build.config" name="active" value="1"/>
+        <property category="build.config" name="count" value="1"/>
+        <property category="build.config" name="excludedefaultforzero" value="0"/>
+        <property category="build.config.0" name="builddir" value="Debug"/>
+        <property category="build.config.0" name="key" value="Debug_Build"/>
+        <property category="build.config.0" name="name" value="Debug Build"/>
+        <property category="build.config.0" name="settings.win32b" value="default"/>
+        <property category="build.config.0" name="type" value="Toolset"/>
+        <property category="build.config.0" name="win32.win32b.builddir" value="Debug_Build"/>
+        <property category="build.config.1" name="key" value="Release_Build"/>
+        <property category="build.config.1" name="name" value="Release Build"/>
+        <property category="build.config.1" name="settings.win32b" value="default"/>
+        <property category="build.config.1" name="type" value="Toolset"/>
+        <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
+        <property category="build.node" name="name" value="Analyser2008.exe"/>
+        <property category="build.node" name="packages" value="vcl;rtl;vclx;dbrtl;vcldb;adortl;dbxcds;dbexpress;vclib;ibxpress;xmlrtl;vclactnband;inet;IntrawebDB_80_100;Intraweb_80_100;vclie;inetdbbde;inetdbxpress;indy;bcbofficexp;bcbsmp;soaprtl;dsnap;bcbie;bdertl;teeui;teedb;tee;vcldbx"/>
+        <property category="build.node" name="use_packages" value="0"/>
+        <property category="build.platform" name="active" value="win32"/>
+        <property category="build.platform" name="win32.Debug_Build.toolset" value="win32b"/>
+        <property category="build.platform" name="win32.Release_Build.toolset" value="win32b"/>
+        <property category="build.platform" name="win32.default" value="win32b"/>
+        <property category="build.platform" name="win32.enabled" value="1"/>
+        <property category="build.platform" name="win32.win32b.enabled" value="1"/>
+        <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.listfile.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.objfile.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.xreffile.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.1" value="_DEBUG"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.Od.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.k.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.r.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.v.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.vi.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.y.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.$D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.$O.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.arg.1" value="DEBUG"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.V.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib\debug"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.z.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.zi.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.1" value="NDEBUG"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.O2.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.k.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.r.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.vi.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.$D.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.$O.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.V.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib\release"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.z.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zi.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zn.enabled" value="1"/>
+        <optionset name="all_configurations">
+          <property category="node" name="displayname" value="All Configurations"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.1" value="WBRTM_NOLOGO"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.arg.1" value="$(BDS)\lib\vcl100.csm"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.Hc.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="S:\WBRTM\LEXER"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.10" value="S:\APLIKACJE\MOUSE PARADIGM 2004\analyser"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.11" value="S:\APLIKACJE\MOUSE ANALYSER BORLAND"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.12" value="$(BDS)\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.13" value="$(BDS)\include\dinkumware"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.14" value="$(BDS)\include\vcl"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="S:\WBRTM\PTRS"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="S:\WBRTM\EXCEPT"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="S:\WBRTM\VIRTUALIO"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="S:\WBRTM\BASE"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="S:\WBRTM\MISCCLASSES"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="analyserrc"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.8" value="S:\APLIKACJE\MOUSE ANALYSER BORLAND\analyserrc"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.9" value="S:/WBRTM"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.Ve.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.b.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.1" value="_RTLDLL"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.2" value="NO_STRICT"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.3" value="_NO_VCL"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.tW.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWC.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWD.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWM.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.1" value="S:\WBRTM\LEXER"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.10" value="S:\APLIKACJE\MOUSE ANALYSER BORLAND"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.2" value="S:\WBRTM\PTRS"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.3" value="S:\WBRTM\EXCEPT"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.4" value="S:\WBRTM\VIRTUALIO"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.5" value="S:\WBRTM\BASE"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.6" value="S:\WBRTM\MISCCLASSES"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.7" value="analyserrc"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.8" value="S:\APLIKACJE\MOUSE ANALYSER BORLAND\analyserrc"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.9" value="S:\APLIKACJE\MOUSE PARADIGM 2004\analyser"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.1" value="S:\WBRTM\LEXER"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.10" value="S:\APLIKACJE\MOUSE ANALYSER BORLAND"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.2" value="S:\WBRTM\PTRS"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.3" value="S:\WBRTM\EXCEPT"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.4" value="S:\WBRTM\VIRTUALIO"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.5" value="S:\WBRTM\BASE"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.6" value="S:\WBRTM\MISCCLASSES"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.7" value="analyserrc"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.8" value="S:\APLIKACJE\MOUSE ANALYSER BORLAND\analyserrc"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.9" value="S:\APLIKACJE\MOUSE PARADIGM 2004\analyser"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.1" value="S:\WBRTM\LEXER"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.10" value="S:\APLIKACJE\MOUSE ANALYSER BORLAND"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.2" value="S:\WBRTM\PTRS"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.3" value="S:\WBRTM\EXCEPT"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.4" value="S:\WBRTM\VIRTUALIO"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.5" value="S:\WBRTM\BASE"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.6" value="S:\WBRTM\MISCCLASSES"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.7" value="analyserrc"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.8" value="S:\APLIKACJE\MOUSE ANALYSER BORLAND\analyserrc"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.9" value="S:\APLIKACJE\MOUSE PARADIGM 2004\analyser"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.1" value="S:\WBRTM\LEXER"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.10" value="S:\APLIKACJE\MOUSE ANALYSER BORLAND"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.11" value="C:\Documents and Settings\borkowsk\Moje dokumenty\Borland Studio Projects"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.12" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.13" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.2" value="S:\WBRTM\PTRS"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.3" value="S:\WBRTM\EXCEPT"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.4" value="S:\WBRTM\VIRTUALIO"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.5" value="S:\WBRTM\BASE"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.6" value="S:\WBRTM\MISCCLASSES"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.7" value="analyserrc"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.8" value="S:\APLIKACJE\MOUSE ANALYSER BORLAND\analyserrc"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.9" value="S:\APLIKACJE\MOUSE PARADIGM 2004\analyser"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.enabled" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.1" value="S:\WBRTM\LEXER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.10" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.11" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.12" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.13" value="BORLAND\analyserrc"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.14" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.15" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.16" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.17" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.18" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.19" value="BORLAND\analyserrc"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.2" value="S:\WBRTM\PTRS"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.20" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.21" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.22" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.23" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.24" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.25" value="BORLAND\analyserrc"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.26" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.27" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.28" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.29" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.3" value="S:\WBRTM\EXCEPT"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.30" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.31" value="BORLAND\analyserrc"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.32" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.33" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.34" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.35" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.36" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.37" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.38" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.39" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.4" value="S:\WBRTM\VIRTUALIO"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.40" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.41" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.42" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.43" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.44" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.45" value="PARADIGM"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.46" value="2004\analyser"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.47" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.48" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.49" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.5" value="S:\WBRTM\BASE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.50" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.51" value="PARADIGM"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.52" value="2004\analyser"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.53" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.54" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.55" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.56" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.57" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.58" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.59" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.6" value="S:\WBRTM\MISCCLASSES"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.60" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.61" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.62" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.63" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.64" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.65" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.66" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.67" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.68" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.69" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.7" value="analyserrc"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.70" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.71" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.72" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.73" value="BORLAND"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.8" value="S:\APLIKACJE\MOUSE"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.9" value="ANALYSER"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.Gi.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.1" value="S:\WBRTM\LEXER"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.10" value="S:\APLIKACJE\MOUSE ANALYSER BORLAND"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.11" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.12" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.13" value="$(BDS)\lib\psdk"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.2" value="S:\WBRTM\PTRS"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.3" value="S:\WBRTM\EXCEPT"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.4" value="S:\WBRTM\VIRTUALIO"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.5" value="S:\WBRTM\BASE"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.6" value="S:\WBRTM\MISCCLASSES"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.7" value="analyserrc"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.8" value="S:\APLIKACJE\MOUSE ANALYSER BORLAND\analyserrc"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.9" value="S:\APLIKACJE\MOUSE PARADIGM 2004\analyser"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpd.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpe.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpp.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.aa.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.ap.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.dynamicrtl.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.1" value="S:\WBRTM\LEXER"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.10" value="S:\APLIKACJE\MOUSE ANALYSER BORLAND"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.2" value="S:\WBRTM\PTRS"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.3" value="S:\WBRTM\EXCEPT"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.4" value="S:\WBRTM\VIRTUALIO"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.5" value="S:\WBRTM\BASE"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.6" value="S:\WBRTM\MISCCLASSES"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.7" value="analyserrc"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.8" value="S:\APLIKACJE\MOUSE ANALYSER BORLAND\analyserrc"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.9" value="S:\APLIKACJE\MOUSE PARADIGM 2004\analyser"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.merge" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="param.libfiles.1" value="import32.lib"/>
+          <property category="win32.*.win32b.ilink32" name="param.libfiles.2" value="cw32i.lib"/>
+          <property category="win32.*.win32b.ilink32" name="param.libfiles.merge" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="param.objfiles.1" value="c0x32.obj"/>
+          <property category="win32.*.win32b.ilink32" name="param.objfiles.2" value="$(PACKAGES)"/>
+          <property category="win32.*.win32b.ilink32" name="param.objfiles.merge" value="1"/>
+        </optionset>
+      </project>
+      <FILELIST>
+        <FILE FILENAME="Analyser2008.bpf" CONTAINERID="BPF" LOCALCOMMAND="" UNITNAME="Analyser2008" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="Analyser2008.res" CONTAINERID="ResTool" LOCALCOMMAND="" UNITNAME="Analyser2008.res" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="ANALYSER32.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ANALYSER32" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="about.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="about" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="analyserrc\analyser.rc" CONTAINERID="RCCompiler" LOCALCOMMAND="" UNITNAME="analyser.rc" FORMNAME="analyser.res" DESIGNCLASS=""/>
+        <FILE FILENAME="S:\WBRTM\MISCCLASSES\Iter_dir.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Iter_dir" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="S:\WBRTM\BASE\RealPath.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="RealPath" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="S:\WBRTM\VIRTUALIO\vobject.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="vobject" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="S:\WBRTM\VIRTUALIO\iodatabase.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="iodatabase" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="S:\WBRTM\EXCEPT\ioexcep.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ioexcep" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="S:\WBRTM\EXCEPT\excpprin.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="excpprin" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="S:\WBRTM\EXCEPT\errorhan.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="errorhan" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="S:\WBRTM\PTRS\wb_pchario.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="wb_pchario" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="S:\WBRTM\PTRS\wb_pchar_verboten.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="wb_pchar_verboten" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="S:\WBRTM\LEXER\regexpr.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="regexpr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="S:\WBRTM\LEXER\regex.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="regex" FORMNAME="" DESIGNCLASS=""/>
+      </FILELIST>
+      <IDEOPTIONS>
+        <VersionInfo>
+          <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+          <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+          <VersionInfo Name="MajorVer">1</VersionInfo>
+          <VersionInfo Name="MinorVer">0</VersionInfo>
+          <VersionInfo Name="Release">0</VersionInfo>
+          <VersionInfo Name="Build">0</VersionInfo>
+          <VersionInfo Name="Debug">False</VersionInfo>
+          <VersionInfo Name="PreRelease">False</VersionInfo>
+          <VersionInfo Name="Special">False</VersionInfo>
+          <VersionInfo Name="Private">False</VersionInfo>
+          <VersionInfo Name="DLL">False</VersionInfo>
+          <VersionInfo Name="Locale">1045</VersionInfo>
+          <VersionInfo Name="CodePage">1250</VersionInfo>
+        </VersionInfo>
+        <VersionInfoKeys>
+          <VersionInfoKeys Name="CompanyName"></VersionInfoKeys>
+          <VersionInfoKeys Name="FileDescription"></VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+          <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
+          <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
+          <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
+          <VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys>
+          <VersionInfoKeys Name="ProductName"></VersionInfoKeys>
+          <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+          <VersionInfoKeys Name="Comments"></VersionInfoKeys>
+        </VersionInfoKeys>
+        <Debugging>
+          <Debugging Name="DebugSourceDirs"></Debugging>
+        </Debugging>
+        <Parameters>
+          <Parameters Name="RunParams">S:\AwariaAndrzej\Grupa_B\*.dat  -D512 -wies</Parameters>
+          <Parameters Name="Launcher"></Parameters>
+          <Parameters Name="UseLauncher">True</Parameters>
+          <Parameters Name="DebugCWD"></Parameters>
+          <Parameters Name="HostApplication"></Parameters>
+          <Parameters Name="RemoteHost"></Parameters>
+          <Parameters Name="RemotePath"></Parameters>
+          <Parameters Name="RemoteParams"></Parameters>
+          <Parameters Name="RemoteLauncher"></Parameters>
+          <Parameters Name="UseRemoteLauncher">False</Parameters>
+          <Parameters Name="RemoteCWD"></Parameters>
+          <Parameters Name="RemoteDebug">False</Parameters>
+          <Parameters Name="Debug Symbols Search Path"></Parameters>
+          <Parameters Name="LoadAllSymbols">True</Parameters>
+          <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+        </Parameters>
+        <Linker>
+          <Linker Name="LibPrefix"></Linker>
+          <Linker Name="LibSuffix"></Linker>
+          <Linker Name="LibVersion"></Linker>
+        </Linker>
+      </IDEOPTIONS>
+    </BCBPROJECT>
+    <buildevents/>
+  </CPlusPlusBuilder.Personality>
+  <StarTeamAssociation></StarTeamAssociation>
+  <StarTeamNonRelativeFiles></StarTeamNonRelativeFiles>
+</BorlandProject>

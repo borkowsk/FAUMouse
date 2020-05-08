@@ -1,11 +1,11 @@
 const char* program_title="\n"
 "===============================================================================\n"
-" MOUSE PARADIGM ANALYSER VERSION 2004c (3.51) , compilation "__DATE__"\n"
+" MOUSE PARADIGM ANALYSER VERSION 2008 (3.65a) , compilation "__DATE__"\n"
 "-------------------------------------------------------------------------------\n";
 const char* autors=
 "\tProgrammed by Wojciech Borkowski under direction of \n"
 "\t         Andrzej Nowak & Robin Vallacher\n"
-"\tPlease see the licence.htm file or http:\\\www.iss.uw.edu.pl\~borkowsk\n"
+"\tPlease see the licence.htm file or http:\\\www.iss.uw.edu.pl\\~borkowsk\n"
 "===============================================================================\n"
 "\n";
 
@@ -13,6 +13,7 @@ const char* autors=
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <ctype.h>
 //#include <values.h>
 #include <assert.h>
 #include <errno.h>
@@ -20,8 +21,8 @@ const char* autors=
 #include <float.h>
 #include <sys/types.h> 
 #include <sys/stat.h>
-#include "platform.hpp"
-#include "iter_dir.hpp"
+#include "include/platform.hpp"
+#include "include/iter_dir.hpp"
 extern "C" void StartAboutDialog();
 
 #define DEFAULT_BAD_VALUE  (-99)
@@ -32,36 +33,38 @@ extern "C" void StartAboutDialog();
 /* User interface tu module */
 char InputFileNames[256]="\0";//"exper.dat";
 char CurrOutFileName[256]="\0";//"exper.dat";
+char DefExt[]="tab";
 
-char Description[1024]="\"Mouse paradigm program - dump file\"";
+char Description[2048]="\"Mouse paradigm program - dump file\"";
 int  comment=1;
 long badval=DEFAULT_BAD_VALUE;
+long SKIP_DUPLICATES=1;
 
 /* REKORD DANYCH I DEFINICJA TABLICY REKORDOW - O SZTYWNYM ROZMIARZE!!! */
 /************************************************************************/
 struct RegRec{
-    double	time;
-    float	distance;
-    int		click;
-    double	speed;
-    double	accel;
+	double	time;
+	float	distance;
+	int		click;
+	double	speed;
+	double	accel;
 };
 
 //ZMIENNE GLOWNEJ TABLICY REKORDOW
 //////////////////////////////////////////
-const size_t MAX_DATA_POINTS=(  10L*    //10 zapisow na sekunde
+const size_t MAX_DATA_POINTS=(  20L*    //10 zapisow na sekunde
                               60L*    //60 sekund na minute
-                              30L*    //30 minut to i tak za duzo
-                              2       //ale po co jeszcze to ?????????
+							  30L*    //30 minut to i tak za duzo
+							  2       //ale po co jeszcze to ?????????
                               );	//NAJWIEKSZA MOZLIWA ILOSC REKORDOW
 
-RegRec huge  RegTabMem[MAX_DATA_POINTS];
-RegRec huge* RegTab=RegTabMem;
+RegRec RegTabMem[MAX_DATA_POINTS];
+RegRec* RegTab=RegTabMem;
 unsigned long table_position;
 
 // INNE PARAMETRY 
 //////////////////////////////////
-int USAIFORMAT=0;						//Czy wczytuje format FAU
+int WHICHFORMAT=0;						//Jaki wczytuje format: 0-DEFAULT 1-OLD FAU 2-Wies³aw rejestrator
 int DIST_CLASS=2;						//ILE KLAS ODLEGLOSCI
 double FixCenterX=-1;						//FOR FIX TARGET MANUALLY
 double FixCenterY=-1;						//FOR FIX TARGET MANUALLY
@@ -159,407 +162,512 @@ int LoadWarsawInput(FILE *file)
     if(skip!=0)
         printf("First %d lines skipped\n",skip);
 
-    for(i=0;!feof(file);i++)
-    {
-        int nfie=0;
-        double pTime;
-        double Distance;
-        int X,Y,click;
-        
-        //Wczytywanie rekordu
-        if( (nfie=fscanf(file,"%d",     &X		))==EOF || nfie!=1) goto ERROR;
-        if(	(nfie=fscanf(file,"%d",     &Y		))==EOF || nfie!=1) goto ERROR;
-        if(	(nfie=fscanf(file,"%le",    &pTime	))==EOF || nfie!=1) goto ERROR;
-        if(	(nfie=fscanf(file,"%d",     &click	))==EOF || nfie!=1) goto ERROR;
-        nfie=fgetc(file);/* Powinno zjesc koniec lini! */
-        if(nfie!='\n' && nfie!=EOF) 
-            goto ERROR;
-        nfie=fgetc(file);/* Sprawdza czy jest jeszcze jakis znak */
-        if(nfie!=EOF) ungetc(nfie,file);
-        
-        //Sprawdzanie srodka ekranu albo zgadywanie jesli nie jest ustawiony
-        if(i==0)
-        {                     
-            if(FixCenterX!=-1)
-            {
-                TargCenterX=FixCenterX;
-            }
-            else
-            {
-                if(TargCenterX==-1)
-                {
-                    TargCenterX=X;
-                    printf("Supposed X of target as %g  !!!\n",TargCenterX);
-                }
-                else
-                    if(TargCenterX!=X)
-                    {
-                        fprintf(stderr,"\aFind X of target is %d, but expected is %g\n",X,TargCenterX);
-                        fprintf(stderr,"\a\a\aDATA FROM DIFERENT SCREEN RESOLUTION CAN'T BE MIXED!\n");
-                        return -2;
-                    }
-            }
+	for(i=0;!feof(file);i++)
+	{
+		int nfie=0;
+		double pTime;
+		double Distance;
+		int X,Y,click;
+		
+		//Wczytywanie rekordu
+		if( (nfie=fscanf(file,"%d",     &X		))==EOF || nfie!=1) goto ERROR;
+		if(	(nfie=fscanf(file,"%d",     &Y		))==EOF || nfie!=1) goto ERROR;
+		if(	(nfie=fscanf(file,"%le",    &pTime	))==EOF || nfie!=1) goto ERROR;
+		if(	(nfie=fscanf(file,"%d",     &click	))==EOF || nfie!=1) goto ERROR;
+		nfie=fgetc(file);/* Powinno zjesc koniec lini! */
+		if(nfie!='\n' && nfie!=EOF) 
+			goto ERROR;
+		nfie=fgetc(file);/* Sprawdza czy jest jeszcze jakis znak */
+		if(nfie!=EOF) ungetc(nfie,file);
+		
+		//Sprawdzanie srodka ekranu albo zgadywanie jesli nie jest ustawiony
+		if(i==0)
+		{
+			if(FixCenterX!=-1)
+			{
+				TargCenterX=FixCenterX;
+			}
+			else
+			{
+				if(TargCenterX==-1)
+				{
+					TargCenterX=X;
+					printf("Supposed X of target as %g  !!!\n",TargCenterX);
+				}
+				else
+					if(TargCenterX!=X)
+					{
+						fprintf(stderr,"\aFind X of target is %d, but expected is %g\n",X,TargCenterX);
+						fprintf(stderr,"\a\a\aDATA FROM DIFFERENT SCREEN RESOLUTION CAN'T BE MIXED!\n");
+						return -2;
+					}
+			}
 
-            if(FixCenterY!=-1)
-            {
-                TargCenterY=FixCenterY;
-            }
-            else
-            {
-                if(TargCenterY==-1)
-                {
-                    TargCenterY=Y;
-                    printf("Supposed Y of target as %g  !!!\n",TargCenterY);
-                }
-                else
-                    if(TargCenterY!=Y)
-                    {
-                        fprintf(stderr,"\aFind Y of target is %d, but expected is %g\n",Y,TargCenterY);
-                        fprintf(stderr,"\a\a\aDATA FROM DIFERENT SCREEN RESOLUTION CANT BE MIXED!\n");
-                        return -2;
-                    }
-            }
-        }
+			if(FixCenterY!=-1)
+			{
+				TargCenterY=FixCenterY;
+			}
+			else
+			{
+				if(TargCenterY==-1)
+				{
+					TargCenterY=Y;
+					printf("Supposed Y of target as %g  !!!\n",TargCenterY);
+				}
+				else
+					if(TargCenterY!=Y)
+					{
+						fprintf(stderr,"\aFind Y of target is %d, but expected is %g\n",Y,TargCenterY);
+						fprintf(stderr,"\a\a\aDATA FROM DIFERENT SCREEN RESOLUTION CANT BE MIXED!\n");
+						return -2;
+					}
+			}
+		}
 
 
-        //Obliczenie odleglosci
-        Distance=sqr(TargCenterX-X)+sqr(TargCenterY-Y);
-        
-        if(Distance>0)
-            Distance=sqrt(Distance);// For all non 0 values
-        else
-            if(Distance<0)
-            {
-                fprintf(stderr,"Bad distance. Set properly center coordinates (X,Y options).\n");
-                exit(1);
-            }
-            if(Distance>LocalMax)
-                LocalMax=Distance;
-            
-            assert(Distance>=0);
-            
-            //Zapamietanie w tablicy dla procedur wyjsciowych
-            RegTab[i].time=pTime;
-            RegTab[i].click=click;
-            RegTab[i].distance=Distance; // Maybe 0 or great than 0 - AKTUALNA ODLEGLOSC
-            
-            if(i>0) //Juz mozna liczyc
-            {
-                deltaT=fabs(RegTab[i].time-RegTab[i-1].time);//AKTUALNA ROZNICA CZASU
-                
-                assert(deltaT>=0);
-                
-                if(deltaT==0)	//POWINNA BYC RACZEJ MNIEJSZA NIZ 1 ALE NIE O!!!
-                {
-                    fprintf(stderr,"WARNING! DeltaT=0 (time)rec %ld & %ld\n",i-1,i);
-                    continue;
-                }
-                
-                delta=fabs(RegTab[i-1].distance-Distance)/deltaT;	//PREDKOSC - ZMIANA ODLEGLOSCI W CZASIE 
-                RegTab[i].speed=delta;		//Reszta zapamietywania w tablicy
-                
-                deltaDelty=(delta-RegTab[i-1].speed)/deltaT;		//PRZYSPIESZENIE - ZMIANA PREDKOSCI W CZASIE
-                if(i>1)
-                    RegTab[i].accel=deltaDelty;	//Reszta zapamietywania w tablicy
-                else
-                    RegTab[i].accel=BRAKMARK;	//Dla 0 i 1 rekordu nie da sie policzyc
-                
-            }
-            else
-            {
-                RegTab[i].speed=BRAKMARK;
-                RegTab[i].accel=BRAKMARK;
-            }
-            
-            continue;
+		//Obliczenie odleglosci
+		Distance=sqr(TargCenterX-X)+sqr(TargCenterY-Y);
+		
+		if(Distance>0)
+			Distance=sqrt(Distance);// For all non 0 values
+		else
+			if(Distance<0)
+			{
+				fprintf(stderr,"Bad distance. Set properly center coordinates (X,Y options).\n");
+				exit(1);
+			}
+			if(Distance>LocalMax)
+				LocalMax=Distance;
+			
+			assert(Distance>=0);
+			
+			//Zapamietanie w tablicy dla procedur wyjsciowych
+			RegTab[i].time=pTime;
+			RegTab[i].click=click;
+			RegTab[i].distance=Distance; // Maybe 0 or great than 0 - AKTUALNA ODLEGLOSC
+			RegTab[i].speed=BRAKMARK;
+			RegTab[i].accel=BRAKMARK;
+				
+			if(i>0) //Juz mozna liczyc
+			{
+				deltaT=fabs(RegTab[i].time-RegTab[i-1].time);//AKTUALNA ROZNICA CZASU
+				
+				assert(deltaT>=0);
+				
+				if(deltaT==0)	//POWINNA BYC RACZEJ MNIEJSZA NIZ 1 ALE NIE O!!!
+				{
+					fprintf(stderr,"WARNING! DeltaT=0 (time)rec %ld & %ld %s\n",i-1,i,(SKIP_DUPLICATES?"(THE SECOND RECORD IS SKIPPED)":"(THE SECOND WILL BE MISS-VALUE)"));
+					if(SKIP_DUPLICATES)
+						i--;//Ten zapis jest niewa¿ny ALE CZY TO BEZPIECZNE I KOMPATYBILNE WSTECZNIE?
+					continue;
+				}
+				
+				delta=fabs(RegTab[i-1].distance-Distance)/deltaT;	//PREDKOSC - ZMIANA ODLEGLOSCI W CZASIE 
+				RegTab[i].speed=delta;		//Reszta zapamietywania w tablicy
+				
+				deltaDelty=(delta-RegTab[i-1].speed)/deltaT;		//PRZYSPIESZENIE - ZMIANA PREDKOSCI W CZASIE
+				if(i>1)
+					RegTab[i].accel=deltaDelty;	//Reszta zapamietywania w tablicy
+				else
+					RegTab[i].accel=BRAKMARK;	//Dla 0 i 1 rekordu nie da sie policzyc
+				
+			}
+			else
+			{
+				RegTab[i].speed=BRAKMARK;
+				RegTab[i].accel=BRAKMARK;
+			}
+			
+			continue;
 ERROR:
-            fprintf(stderr,"Data format error at %d. record. LOAD BREAK!\n",i+1);
-            return -1;
-    }
-    
-    //#ifdef __MSDOS__
-    //i--; /* \r\n sequention make error-behavior of feof() */
-    //#endif
-    table_position=i;
-    if(FixMaxDistance!=0)
-        MAX_DIST=FixMaxDistance;
-    else
-        MAX_DIST=LocalMax+1/* Drobny dodatek zeby zeby distance/MAX <1 */;
-    return 0;
+			fprintf(stderr,"Data format error at %d. record. LOAD FAILED!\n",i+1);
+			return -1;
+	}
+	
+	//#ifdef __MSDOS__
+	//i--; /* \r\n sequention make error-behavior of feof() */
+	//#endif
+	table_position=i;
+	if(FixMaxDistance!=0)
+		MAX_DIST=FixMaxDistance;
+	else
+		MAX_DIST=LocalMax+1/* Drobny dodatek zeby zeby distance/MAX <1 */;
+	return 0;
 }
 
 int LoadStrTo(FILE* file,char* Str,char Sep)
 {
-    int ch=EOF;
-    
-    while((ch=getc(file))!=Sep && ch!=EOF )
-    {
-        *Str=ch;
-        Str++;
-    }
-    *Str='\0';
-    
-    if(ch==EOF)
-        return EOF;
-    else
-        return 1;
+	int ch=EOF;
+	
+	while((ch=getc(file))!=Sep && ch!=EOF )
+	{
+		*Str=ch;
+		Str++;
+	}
+	*Str='\0';
+	
+	if(ch==EOF)
+		return EOF;
+	else
+		return 1;
 }
 
+int LoadWiesioInput(FILE *file)
+{
+	long		i=0;
+	if(FixMaxDistance<=0)
+	{
+		printf("!!! Max distance not set!!!\n");
+		goto ERROR;
+	}
+	
+	sprintf(Description,"%s %g ",
+					"\"Mysz\" by W.Bartkowski input format. Max distance: ",
+					FixMaxDistance);
+	printf("%s\n",Description);
+	char test[1024];
+	
+	for(i=0;!feof(file);i++)
+	{
+		int c;
+		while(isspace(c=getc(file)));//Zabezpieczenie przed pust¹ lini¹ na koñcu
+		if(c==EOF) break;
+		else ungetc(c,file);
+		
+		int nfie=0;
+		{
+		float pTime;
+		float Distance;
+		
+		//Wczytywanie rekordu
+		if((nfie=fscanf(file,"%f ",     &Distance))==EOF || nfie!=1) goto ERROR;
+		if((nfie=fscanf(file,"%f",     &pTime))==EOF || nfie!=1) goto ERROR;
+		//Kontrola
+		//printf("%i] %g %g\n",i,Distance,pTime);
+
+		RegTab[i].time=pTime/1000.0;//Bo w pliku milisekundy
+		RegTab[i].click=0;
+		RegTab[i].distance=Distance*FixMaxDistance; // Maybe 0 or great than 0
+		RegTab[i].speed=BRAKMARK;
+		RegTab[i].accel=BRAKMARK;
+		}
+	
+		if(i>0) //Juz mozna liczyæ
+			{
+				double deltaT=fabs(RegTab[i].time-RegTab[i-1].time);//AKTUALNA ROZNICA CZASU
+				
+				assert(deltaT>=0);
+				
+				if(deltaT==0)	//POWINNA BYC RACZEJ MNIEJSZA NIZ 1s ALE NIE O!!!
+				{
+					fprintf(stderr,"WARNING! DeltaT=0 (time)rec %ld & %ld %s\n",i-1,i,(SKIP_DUPLICATES?"(THE SECOND RECORD IS SKIPPED)":"(THE SECOND WILL BE MISS-VALUE)"));
+					if(SKIP_DUPLICATES)
+						i--;//Pomija "duplikaty" rekordów
+					continue;
+				}
+				
+				double delta=fabs(RegTab[i-1].distance-RegTab[i].distance)/deltaT;//PREDKOSC - ZMIANA ODLEGLOSCI W CZASIE 
+				if(fabs(delta)>50*FixMaxDistance) //Za du¿o. Podejrzane
+				{
+					fprintf(stderr,"WARNING! Suspicious value of velocity. For rec %ld = %g\n",i,delta);
+				}
+				RegTab[i].speed=delta;	//Reszta zapamietywania w tablicy
+
+				if(i>1 && RegTab[i-1].speed!=BRAKMARK)
+				{
+					double deltaDelty=(delta-RegTab[i-1].speed)/deltaT;	//PRZYSPIESZENIE - ZMIANA PREDKOSCI W CZASIE
+					if(fabs(deltaDelty)>2000*FixMaxDistance) //Za du¿o. Podejrzane
+					{
+						fprintf(stderr,"WARNING! Suspicious value of acceleration. For rec %ld = %g\n",i,deltaDelty);
+					}
+					RegTab[i].accel=deltaDelty;	//Reszta zapamietywania w tablicy
+				}
+#ifndef NDEBUG
+				else 
+				RegTab[i].accel=BRAKMARK;	//Dla 0 i 1 rekordu i po opuszczeniach nie da sie policzyc
+#endif
+			}
+
+		table_position=i;
+	}
+
+	MAX_DIST=FixMaxDistance;
+	return 0;
+ERROR:
+	fprintf(stderr,"Data format error at %d. record. LOAD FAILED!\n",i+1);
+	return -1;
+}
 
 int LoadFAUInput(FILE *file)
 {
-    char		resztki[1024];
-    char		quest[128];
-    char		subj[512];
-    long		i;
-    double		LocalMax=-9999;
-    
-    memset(Description,'\0',sizeof(Description));	
-    memset(Description,' ',30);		//20 spacji na poczatku zeby wpisac subject
-    fgets(&Description[21],sizeof(Description)-21,file);//Jedna linia naglowka kolumn
-    Description[strlen(Description)-1]='\0';	//Zakonczona 
-    
-    //subj-cond,Quest,time,x,y,dist,speed,accel
-    
-    for(i=0;!feof(file);i++)
-    {
-        int			nfie=0;
-        float		pTime;
-        int			X=0;
-        int			Y=0;
-        int			click=0;
-        float		Distance;
-        float		Speed;
-        float		Acceleration;
-        
-        if( (nfie=LoadStrTo(file,subj,','))==EOF || nfie!=1) goto ERROR;//Subject-condition
-        if(	(nfie=LoadStrTo(file,quest,','))==EOF || nfie!=1) goto ERROR;
-        if(	(nfie=fscanf(file,"%f,",    &pTime	))==EOF || nfie!=1) goto ERROR;
-        if( (nfie=fscanf(file,"%d,",     &X		))==EOF || nfie!=1) goto ERROR;
-        if(	(nfie=fscanf(file,"%d,",     &Y		))==EOF || nfie!=1) goto ERROR;
-        if(	(nfie=fscanf(file,"%f,",   &Distance))==EOF || nfie!=1) goto ERROR;
-        if( Distance<0 )
-        {
-            fprintf(stderr,"Negative distance %g .\n",Distance);
-            goto ERROR;
-        }
-        if(	(nfie=fscanf(file,"%f,",   &Speed	))==EOF || nfie!=1){ if(i==0) Speed=BRAKMARK; else goto ERROR;}
-        if(	(nfie=fscanf(file,"%f",&Acceleration))==EOF || nfie!=1){ if(i<2)  Acceleration=BRAKMARK; else goto ERROR;}
-        if( (nfie=LoadStrTo(file,resztki,'\n'))==EOF || nfie!=1) goto ERROR;//Reszta lini
-        
-        if( strlen(resztki)>=sizeof(resztki) ) 
-            goto ERROR;
-        
-        nfie=fgetc(file);/* Sprawdza czy jest jeszcze jakis znak do przeczytania */
-        if(nfie!=EOF && nfie!=subj[0]) 
-            goto ERROR; /* Powinien byc koniec pliku lub to samo co w poprzedniej lini */
-        
-        if(nfie!=EOF) 
-            ungetc(nfie,file);
-        
-        if(i>1 && Distance>LocalMax)
-            LocalMax=Distance;
-        
-        RegTab[i].time=pTime;
-        RegTab[i].click=click;
-        RegTab[i].distance=Distance; // Maybe 0 or great than 0
-        RegTab[i].speed=Speed;
-        RegTab[i].accel=Acceleration;
-        
-        continue;
+	char		resztki[1024];
+	char		quest[128];
+	char		subj[512];
+	long		i;
+	double		LocalMax=-9999;
+	
+	memset(Description,'\0',sizeof(Description));	
+	memset(Description,' ',30);		//20 spacji na poczatku zeby wpisac subject
+	fgets(&Description[21],sizeof(Description)-21,file);//Jedna linia naglowka kolumn
+	Description[strlen(Description)-1]='\0';	//Zakonczona 
+	
+	//subj-cond,Quest,time,x,y,dist,speed,accel
+	
+	for(i=0;!feof(file);i++)
+	{
+		int			nfie=0;
+		float		pTime;
+		int			X=0;
+		int			Y=0;
+		int			click=0;
+		float		Distance;
+		float		Speed;
+		float		Acceleration;
+		
+		if( (nfie=LoadStrTo(file,subj,','))==EOF || nfie!=1) goto ERROR;//Subject-condition
+		if(	(nfie=LoadStrTo(file,quest,','))==EOF || nfie!=1) goto ERROR;
+		if(	(nfie=fscanf(file,"%f,",    &pTime	))==EOF || nfie!=1) goto ERROR;
+		if( (nfie=fscanf(file,"%d,",     &X		))==EOF || nfie!=1) goto ERROR;
+		if(	(nfie=fscanf(file,"%d,",     &Y		))==EOF || nfie!=1) goto ERROR;
+		if(	(nfie=fscanf(file,"%f,",   &Distance))==EOF || nfie!=1) goto ERROR;
+		if( Distance<0 )
+		{
+			fprintf(stderr,"Negative distance %g .\n",Distance);
+			goto ERROR;
+		}
+		if(	(nfie=fscanf(file,"%f,",   &Speed	))==EOF || nfie!=1){ if(i==0) Speed=BRAKMARK; else goto ERROR;}
+		if(	(nfie=fscanf(file,"%f",&Acceleration))==EOF || nfie!=1){ if(i<2)  Acceleration=BRAKMARK; else goto ERROR;}
+		if( (nfie=LoadStrTo(file,resztki,'\n'))==EOF || nfie!=1) goto ERROR;//Reszta lini
+		
+		if( strlen(resztki)>=sizeof(resztki) ) 
+			goto ERROR;
+		
+		nfie=fgetc(file);/* Sprawdza czy jest jeszcze jakis znak do przeczytania */
+		if(nfie!=EOF && nfie!=subj[0]) 
+			goto ERROR; /* Powinien byc koniec pliku lub to samo co w poprzedniej lini */
+		
+		if(nfie!=EOF) 
+			ungetc(nfie,file);
+		
+		if(i>1 && Distance>LocalMax)
+			LocalMax=Distance;
+		
+		RegTab[i].time=pTime;
+		RegTab[i].click=click;
+		RegTab[i].distance=Distance; // Maybe 0 or great than 0
+		RegTab[i].speed=Speed;
+		RegTab[i].accel=Acceleration;
+		
+		continue;
 ERROR:
-        fprintf(stderr,"Data format error at %d. record. LOAD BREAK!\n",i+1);
-        return -1;	
-    }
-    
-    //#ifdef __MSDOS__
-    //i--; /* \r\n sequention make error-behavior of feof() */
-    //#endif
-    memcpy(Description,subj,strlen(subj));
-    memcpy(Description+strlen(subj)+1,quest,strlen(quest));
-    table_position=i;
-    if(FixMaxDistance!=0)
-        MAX_DIST=FixMaxDistance;
-    else
-        MAX_DIST=LocalMax+1/* Drobny dodatek zeby zeby distance/MAX <1 */;
-    return 0;
+		fprintf(stderr,"Data format error at %d. record. LOAD FAILED!\n",i+1);
+		return -1;	
+	}
+	
+	//#ifdef __MSDOS__
+	//i--; /* \r\n sequention make error-behavior of feof() */
+	//#endif
+	memcpy(Description,subj,strlen(subj));
+	memcpy(Description+strlen(subj)+1,quest,strlen(quest));
+	table_position=i;
+	if(FixMaxDistance!=0)
+		MAX_DIST=FixMaxDistance;
+	else
+		MAX_DIST=LocalMax+1/* Drobny dodatek zeby zeby distance/MAX <1 */;
+	return 0;
 }
 
 int LoadFileAction(const char* FileName)
 {
-    FILE *file;
-    if((file=fopen(FileName,"rt"))==NULL)
-    {
-        fprintf(stderr,"File: %s\n",FileName);
-        perror("Can't read file! \7\7\7");
-        exit(1);
-    }
-    
-    if(USAIFORMAT==1)
-    {
-        if(LoadFAUInput(file)!=0)
-        {
-            fprintf(stderr,"File format error!!!(OLD FAU INPUT SYNTAX)\n");
-            return(2);
-        }
-    }
-    else
-    {
-        if(LoadWarsawInput(file)!=0)
-        {
-            fprintf(stderr,"File format error!!!(NEW INPUT SYNTAX)\n");
-            return(2);
-        }
-    }
-    
-    strcat(Description,FileName);	
-    fclose(file);
-    return 0;
+	FILE *file;
+	if((file=fopen(FileName,"rt"))==NULL)
+	{
+		fprintf(stderr,"File: %s\n",FileName);
+		perror("Can't read file! \7\7\7");
+		exit(1);
+	}
+	
+	if(WHICHFORMAT==1)    //Czy stary format
+	{
+		if(LoadFAUInput(file)!=0)
+		{
+			fprintf(stderr,"File format error!!!(OLD FAU INPUT SYNTAX)\n");
+			return(2);
+		}
+	}
+	else
+	if(WHICHFORMAT==2)    //Czy Wies³awa dziwny format
+	{
+	   if(LoadWiesioInput(file)!=0)
+		{
+			fprintf(stderr,"File format error!!!(W.BARKOWSKI SIMPLE INPUT SYNTAX)\n");
+			return(2);
+		}
+	}
+	else
+	{
+		if(LoadWarsawInput(file)!=0)
+		{
+			fprintf(stderr,"File format error!!!(NEW INPUT SYNTAX)\n");
+			return(2);
+		}
+	}
+	
+	strcat(Description,FileName);	
+	fclose(file);
+	return 0;
 }
 
 
 void SaveRawFileAction(const char* FileName,long skip)
 //ZAPISYWANIE PLIKU Z SUROWYM FORMATEM (opcja -r czyli "RAW")
 {
-    FILE *file;
-    
-    if((file=fopen(FileName,"wt"))==NULL)
-    {
-        fprintf(stderr,"File: %s\n",FileName);
-        perror("Fatal! Can't store data! \7\7\7");
-        return;
-    }
-    //else errno=0;
-    if(comment!=0)
-    {
-        if(skip>0)
-            fprintf(file," %s [skipped records from 0 to %ld]\n",Description,skip-1);
-        else
-            fprintf(file," %s [all records translated]\n",Description);
-        fprintf(file,"\"%s\"\t\"%s\"\t\"%s\"\t\"%s\"\t\"%s\"\n","  TIME  ","CLIK","DISTANCE","V(pix/sec)","A(pix/sec^2)");
-    }
-    
-    printf("Records from 0 to %d will be skipped. %d records will be used.\n",skip-1,table_position-skip);
-    
-    for(long i=skip;i<table_position;i++)	// Calculations - PETLA LICZENIA
-    {
-        assert(RegTab[i].distance>=0);
-        //WLASCIWY ZAPIS DO PLIKU WYJSCIOWEGO
-        if(EOF==fprintf(file,"%8.3lf\t%3d\t%8.*lf\t%8.*lf\t%10.*lf\n",
-            RegTab[i].time,
-            RegTab[i].click,
-            DECPOSIT,RegTab[i].distance,
-            DECPOSIT,(RegTab[i].speed!=BRAKMARK?fabs(RegTab[i].speed):badval),
-            DECPOSIT,(RegTab[i].accel!=BRAKMARK?fabs(RegTab[i].accel):badval)
-            )
-            )
-        {
-            perror(FileName);
-            exit(errno);
-        }
-    }
-    fclose(file);//TU PLIK JEST JUZ GOTOWY
+	FILE *file;
+	
+	if((file=fopen(FileName,"wt"))==NULL)
+	{
+		fprintf(stderr,"File: %s\n",FileName);
+		perror("Fatal! Can't store data! \7\7\7");
+		return;
+	}
+	//else errno=0;
+	if(comment!=0)
+	{
+		if(skip>0)
+			fprintf(file," %s [skipped records from 0 to %ld]\n",Description,skip-1);
+		else
+			fprintf(file," %s [all records translated]\n",Description);
+		fprintf(file,"\"%s\"\t\"%s\"\t\"%s\"\t\"%s\"\t\"%s\"\n","  TIME  ","CLIK","DISTANCE","V(pix/sec)","A(pix/sec^2)");
+	}
+	
+	printf("Records from 0 to %d will be skipped. %d records will be used.\n",skip-1,table_position-skip);
+	
+	for(long i=skip;i<table_position;i++)	// Calculations - PETLA LICZENIA
+	{
+		assert(RegTab[i].distance>=0);
+		//WLASCIWY ZAPIS DO PLIKU WYJSCIOWEGO
+		if(EOF==fprintf(file,"%8.3lf\t%3d\t%8.*lf\t%8.*lf\t%10.*lf\n",
+			RegTab[i].time,
+			RegTab[i].click,
+			DECPOSIT,RegTab[i].distance,
+			DECPOSIT,(RegTab[i].speed!=BRAKMARK?fabs(RegTab[i].speed):badval),
+			DECPOSIT,(RegTab[i].accel!=BRAKMARK?fabs(RegTab[i].accel):badval)
+			)
+			)
+		{
+			perror(FileName);
+			exit(errno);
+		}
+	}
+	fclose(file);//TU PLIK JEST JUZ GOTOWY
 }
 
 
 int DumpGroup(FILE* file,long start,long krok,bool breakline=true)
 //Funkcja liczaca dla grup i zapisujaca wyniki do pliku
 {
-    const MXCLAS=12;
-    long  end=start+krok;
-    long    i=0;
-    double     DistSteady[MXCLAS];
-    stat_class DistClasses[MXCLAS];
-    stat_class VeloClasses[MXCLAS];
-    stat_class AcceClasses[MXCLAS];
-    
-    double LocMinDist=INT_MAX; // Najmniejsza odleglosc od trrget w grupie - do ustawienia
-    double LocMaxDist=0;      // Najwieksza odleglosc od target w grupie - do ustawienia
-    
-    for(int k=0;k<MXCLAS;k++)
-        DistSteady[k]=0.0;	//Musi byc wyzerowane bo nie ma tu zerowania w konstruktorze
-    
-    //if(start<=1)
-    //	start=2;
-    assert(start>=2);//Conajmniej bo dwa pierwsze rekordy maja braki w "speed" i "accel"
-    
-    for(i=start;i<end;i++)// MIN/MAX searching 
-    {
-        double  distance=RegTab[i].distance;
-        assert(distance>=0);
-        if(distance>LocMaxDist)
-            LocMaxDist=distance;
-        if(distance<LocMinDist)
-            LocMinDist=distance;
-    }
-    
-    double alltime=0;//Konrolne zliczanie calego czasu
-    double epsilon=pow(10,EPSILPOW);//REST: V<%g pix/s
-    if(breakline)
-        printf("Time group from %5d to %5d; distance from %.*lf to %.*lf\n",start,end-1,DECPOSIT,LocMinDist,DECPOSIT,LocMaxDist);
-    
-    if(comment!=0)
-        fprintf(file,"%4ld-%4ld\t",start,end-1);
-            
-    for(i=start;i<end;i++)// Calculations - WLASCIWE OBLICZENIA W PETLI DLA GRUP
-    {
-        double  distance=RegTab[i].distance;
-        double	deltaT=fabs(RegTab[i].time-RegTab[i-1].time);
-        double  delta=fabs(RegTab[i].speed);		//PREDKOSC - ROZNICA ODLEGLOSCI W CZASIE
-        double  deltaDelty=fabs(RegTab[i].accel);	//PRZYSPIESZENIE - ROZNICA PREDKOSCI W CZASIE
-        
-        if(deltaT==0)//ZAZWYCZAJ MNIEJSZE NIZ 1 ALE NIE 0!!!
-        {
-            fprintf(stderr,"WARNING! DeltaT=0 (time)rec %ld & %ld(is skipped)\n",i-1,i);
-            continue;
-        }
-        
-        //olddelta=delta;	//ZAPAMIETANIE DLA NASTEPNEGO KROKU PETLI
-        //olddistance=distance;
-        
-        //REJESTRACJA STATYSTYK GLOBALNYCH
-        DistClasses[0].Register(distance);
-        VeloClasses[0].Register(delta);
-        AcceClasses[0].Register(fabs(deltaDelty));
-        
-        //printf("%e %g\n",delta,delta);
-        alltime+=deltaT;
-        if(-epsilon<delta && delta<epsilon)/* Gdy predkosc +-=0 */
-        {
-            //printf("%e %10.*lf\n",delta,DECPOSIT,delta);
-            DistSteady[0]+=deltaT;
-        }
-        
-        //REJESTRACJA DLA STATYSTYK GRUPOWYCH
-        if(LocMaxDist>LocMinDist)//O ile wogole jest zroznicowanie
-        {
-            unsigned GroupIndex=
-                (
-                (distance-LocMinDist)
-                /
-                (LocMaxDist-LocMinDist)
-                )
-                *DIST_CLASS+1;
-            
-            if(GroupIndex>DIST_CLASS)//Wypadl MAX
-            {
-                GroupIndex=DIST_CLASS;
-            }
-            
-            assert(0<GroupIndex && GroupIndex<=DIST_CLASS);
-            
-            DistClasses[GroupIndex].Register(distance);
-            VeloClasses[GroupIndex].Register(delta);
-            AcceClasses[GroupIndex].Register(fabs(deltaDelty));
-            
-            if(-epsilon<delta && delta<epsilon)/* Gdy predkosc +-=0 */
-            {
-                DistSteady[GroupIndex]+=deltaT;
-            }
-        }
-        
-    }
-    
+	const MXCLAS=12;
+	long  end=start+krok;
+	long    i=0;
+	double     DistSteady[MXCLAS];
+	stat_class DistClasses[MXCLAS];
+	stat_class VeloClasses[MXCLAS];
+	stat_class AcceClasses[MXCLAS];
+	
+	double LocMinDist=INT_MAX; // Najmniejsza odleglosc od trrget w grupie - do ustawienia
+	double LocMaxDist=0;      // Najwieksza odleglosc od target w grupie - do ustawienia
+	
+	for(int k=0;k<MXCLAS;k++)
+		DistSteady[k]=0.0;	//Musi byc wyzerowane bo nie ma tu zerowania w konstruktorze
+	
+	//if(start<=1)
+	//	start=2;
+	assert(start>=2);//Conajmniej bo dwa pierwsze rekordy maja braki w "speed" i "accel"
+	
+	for(i=start;i<end;i++)// MIN/MAX searching 
+	{
+		double  distance=RegTab[i].distance;
+		assert(distance>=0);
+		if(distance>LocMaxDist)
+			LocMaxDist=distance;
+		if(distance<LocMinDist)
+			LocMinDist=distance;
+	}
+	
+	double alltime=0;//Konrolne zliczanie calego czasu
+	double epsilon=pow(10,EPSILPOW);//REST: V<%g pix/s
+	if(breakline)
+		printf("Time group from %5d to %5d; distance from %.*lf to %.*lf\n",start,end-1,DECPOSIT,LocMinDist,DECPOSIT,LocMaxDist);
+	
+	if(comment!=0)
+		fprintf(file,"%4ld-%4ld\t",start,end-1);
+			
+	for(i=start;i<end;i++)// Calculations - WLASCIWE OBLICZENIA W PETLI DLA GRUP
+	{
+		double  distance=RegTab[i].distance;
+		double	deltaT=fabs(RegTab[i].time-RegTab[i-1].time);
+		if(deltaT==0)//ZAZWYCZAJ MNIEJSZE NIZ 1 ALE NIE 0!!!
+		{
+			fprintf(stderr,"WARNING! DeltaT=0 Time btw. record %ld & %ld. The last one is skipped.\n",i-1,i);
+			continue;
+		}
+		
+		double  delta=fabs(RegTab[i].speed);		//PREDKOSC - ROZNICA ODLEGLOSCI W CZASIE
+		double  deltaDelty=fabs(RegTab[i].accel);	//PRZYSPIESZENIE - ROZNICA PREDKOSCI W CZASIE
+		
+		if(RegTab[i].speed==BRAKMARK || RegTab[i].accel==BRAKMARK)//Te mog³y by byæ niepoprawne (BRAKMARK)
+		{
+			fprintf(stderr,"WARNING! Velocity or acceleratiom missed for record %ld. Record skipped.\n",i);
+			continue;
+		}
+
+		assert(RegTab[i].speed!=BRAKMARK);assert(RegTab[i].accel!=BRAKMARK);
+		//olddelta=delta;	//ZAPAMIETANIE DLA NASTEPNEGO KROKU PETLI
+		//olddistance=distance;
+		
+		//REJESTRACJA STATYSTYK GLOBALNYCH
+		DistClasses[0].Register(distance);
+		VeloClasses[0].Register(delta);
+		AcceClasses[0].Register(fabs(deltaDelty));
+		
+		//printf("%e %g\n",delta,delta);
+		alltime+=deltaT;
+		if(-epsilon<delta && delta<epsilon)/* Gdy predkosc +-=0 */
+		{
+			//printf("%e %10.*lf\n",delta,DECPOSIT,delta);
+			DistSteady[0]+=deltaT;
+		}
+		
+		//REJESTRACJA DLA STATYSTYK GRUPOWYCH
+		if(LocMaxDist>LocMinDist)//O ile wogole jest zroznicowanie
+		{
+			unsigned GroupIndex=
+				(
+				(distance-LocMinDist)
+				/
+				(LocMaxDist-LocMinDist)
+				)
+				*DIST_CLASS+1;
+			
+			if(GroupIndex>DIST_CLASS)//Wypadl MAX
+			{
+				GroupIndex=DIST_CLASS;
+			}
+			
+			assert(0<GroupIndex && GroupIndex<=DIST_CLASS);
+			
+			DistClasses[GroupIndex].Register(distance);
+			VeloClasses[GroupIndex].Register(delta);
+			AcceClasses[GroupIndex].Register(fabs(deltaDelty));
+			
+			if(-epsilon<delta && delta<epsilon)/* Gdy predkosc +-=0 */
+			{
+				DistSteady[GroupIndex]+=deltaT;
+			}
+		}
+		
+	}
+	
     //ZAPISANIE  STATYSTYK GLOBALNYCH
     if(EOF==fprintf(file,"%8.3lf\t%8.3lf\t%8.3lf\t%8.3lf\t%10.3lf\t%10.3lf\t",
         DistClasses[0].Mean(),DistClasses[0].Sigma(),
@@ -775,46 +883,64 @@ void write_help(const char* progname)
     printf("USAGE:\n\t %s infile [outfile] [ options ]\n\n",progname);
     printf("where infile may include '*' and '?' or it may be a directory name,\n");
     printf("and outfile is optional.\n");
-    printf("Options may include the following:\n");
-    
+	printf("Options may include the following:\n");
     printf("[-m ] - make old-style multi line output .\t(%s)\n",(multi==1?"YES":"NO"));
     printf("[-r ] - make raw output file for dynamic plots.\t(%s)\n",(extract==0?"YES":"NO"));        
     printf("\tThis produce timeseries file for detailed study of a particular case.\n");
     printf("[-XN] - force target position X diferent than stored in input file\n");
-    printf("[-YN] - force target position Y diferent than stored in input filen"); 
-    printf("[-skN] - skip first N records \t(default is %ld)\n",skipval);
+    printf("[-YN] - force target position Y diferent than stored in input file\n"); 
+	printf("[-skN] - skip first N records \t(default is %ld)\n",skipval);
+	printf("[-d0^1] - skip time duplicates \t (default is %s)\n",(SKIP_DUPLICATES?"ON":"OFF"));
     printf("[-exN] - extract N time groups \t(default is %d)\n",groups);
-    printf("[-cN] - extract N distance groups \t(default is %d)\n",DIST_CLASS);        
+	printf("[-cN] - extract N distance groups \t(default is %d)\n",DIST_CLASS);
     printf("[-pN] - output precision in digits after decimal points (%u)\n",DECPOSIT);	
-    printf("[-bN] - bad value marker \t(default is %ld)\n",badval);	
-    printf("[-DN] - fix max distance \t(default is %g)\n",FixMaxDistance);	
+	printf("[-bN] - bad value marker \t(default is %ld)\n",badval);	
+	printf("[-DN] - fix max distance \t(default is %g)\n",FixMaxDistance);	
     printf("[-nc] - optional \"non comment\" switch which\n");
     printf("\tremove texts and GROUP and WHOLE TIME column \t(%s)\n",(comment?"YES":"NO"));
-    printf("[-fau] - input in old FAU format (not from MOUSEREG) (%s)\n",(USAIFORMAT==0?"NO":"YES"));   
-    printf("%s","\t'N' means proper value of paramater.\n\t In (), the default values are provided.");
-    StartAboutDialog();   
-    getchar();
+	printf("[-fau] - input in old FAU format (not from MOUSEREG) (%d)\n",WHICHFORMAT);
+	printf("[-wies] - input in Bartkowski format (not from MOUSEREG) (%d)\n",WHICHFORMAT);
+	printf("%s","\t'N' means proper value of paramater.\n\t In (), the default values are provided.");
+	StartAboutDialog();   
+	getchar();
 }
 
 void read_options(int first_opt,int argc,char* argv[])
 {
     for(int i=first_opt;argv[i]!=NULL;i++) /* Parse parameters */
         switch(argv[i][1]){
-        case 'f':USAIFORMAT=1;
-            printf("* Old FAU input file format will be expect\n");
-            break;
+		case 'f':WHICHFORMAT=1;
+			printf("* Old FAU input file format will be expected\n");
+			break;
+		case 'w':WHICHFORMAT=2;
+			DefExt[0]='o';DefExt[1]='u';DefExt[2]='t'; //Musi byæ inne bo zwykle jest DAT!
+			printf("* Wiesio Bartkowski input file format will be expected\n");
+			if(FixMaxDistance==0)
+				{
+					printf(" !!! You have to set max distance (-D option):\n"
+						   "** What is the max distantance for current data?:\n");
+					float pom=0;
+					scanf("%f",&pom);
+					if(pom<=0)
+					{
+					  printf("Invalid number. Sorry.");
+					  exit(-1);
+					}
+					FixMaxDistance=pom;
+				}
+			break;
         case 'n':comment=0;
-            printf("* Comment was set to %d.\n",comment);
+			printf("* Comment was set to %d.\n",comment);
             break;
         case 'b':badval=atol(argv[i]+2);
-            printf("* Bad value marker was set to %ld.\n",badval);
+			printf("* Bad value marker was set to %ld.\n",badval);
             break;
         case 's':skipval=atol(argv[i]+3);
             printf("* Skip counter was set to %ld.\n",skipval);
             break;
         case 'r':extract=0;
             printf("* Raw output mode was enabled.\n");
-            break;
+			break;
         case 'm':multi=1;
             printf("* Multi line output was enabled.\n");
             break;
@@ -827,9 +953,12 @@ void read_options(int first_opt,int argc,char* argv[])
         case 'Y':FixCenterY=atol(argv[i]+2);
             printf("* Target Y was set to %g.\n",FixCenterY);
             break;
-        case 'D':FixMaxDistance=atol(argv[i]+2)+1;
+		case 'D':FixMaxDistance=atol(argv[i]+2)+1;
             printf("* Max distance was fixed on %g.\n",FixMaxDistance);
-            break;
+			break;
+		case 'd':SKIP_DUPLICATES=atol(argv[i]+2);
+			printf("* Skipping time duplicates if switched %s\n",(SKIP_DUPLICATES?"ON":"OFF"));
+			break;
         case 'c':DIST_CLASS=atol(argv[i]+2);
             printf("* Distance class was set to %d.\n",DIST_CLASS);
             break;
@@ -838,7 +967,7 @@ void read_options(int first_opt,int argc,char* argv[])
 
 int main(int argc,char* argv[])
 {
-    int first_opt=2;
+	int first_opt=2;
       
     char drive[_MAX_DRIVE];
     char dir[_MAX_DIR];
@@ -894,7 +1023,7 @@ int main(int argc,char* argv[])
         char name_buffer[_MAX_FNAME+_MAX_EXT+1];
         sprintf(path_buffer,"%s%s",drive,dir);
         sprintf(name_buffer,"%s%s",fname,ext);        
-        directory_iterator currdir(path_buffer,(name_buffer[0]=='\0'?"*.out":name_buffer));
+        wbrtm::directory_iterator currdir(path_buffer,(name_buffer[0]=='\0'?"*.out":name_buffer));
         
         if(!currdir.IsOK())
         {
@@ -909,12 +1038,12 @@ int main(int argc,char* argv[])
             {                
                 sprintf(InputFileNames,"%s%s",currdir.get_name(),*currdir);     
                 strcpy(CurrOutFileName,InputFileNames);
-                ZmienEXT(CurrOutFileName,"dat"); //Uproszczenie zamiast podkladania gwiazdki
+				ZmienEXT(CurrOutFileName,DefExt); //Uproszczenie zamiast podkladania gwiazdki
                 printf("Processing file %s to %s\n",InputFileNames,CurrOutFileName);
 
                 if(LoadFileAction(InputFileNames)!=0)
                     continue;
-                
+				
                 if(extract==1)
                     MakeExtractFile(CurrOutFileName,skipval,groups,multi);
                 else
@@ -933,7 +1062,7 @@ int main(int argc,char* argv[])
             
             if(*CurrOutFileName=='\0')
             {                
-                sprintf(CurrOutFileName,"%s%sallout.dat",drive,dir);
+				sprintf(CurrOutFileName,"%s%sallout.%s",drive,dir,DefExt);
                 printf("Output to %s\n",CurrOutFileName);
             }
             
@@ -942,7 +1071,7 @@ int main(int argc,char* argv[])
             {
                 fprintf(stderr,"Can't store data! \7\7\7\n");
                 perror(CurrOutFileName);
-                goto READ_ERROR;
+				goto READ_ERROR;
             }
             
             NewStyleHeader(file,groups);
@@ -966,7 +1095,7 @@ int main(int argc,char* argv[])
         if(*CurrOutFileName=='\0')        // Brak nazwy pliku wyjsciowego. Katalog - "S:\MOUSE PARADIGM 2004\DANE\ "
         {	       
             strcpy(CurrOutFileName,InputFileNames);
-            ZmienEXT(CurrOutFileName,"dat");
+			ZmienEXT(CurrOutFileName,DefExt);
             printf("Output to %s\n",CurrOutFileName);
         }
         
@@ -979,7 +1108,7 @@ int main(int argc,char* argv[])
             MakeExtractFile(CurrOutFileName,skipval,groups,multi);
         else
             SaveRawFileAction(CurrOutFileName,skipval);
-    }
+	}
     
     printf("\t D O N E !\n<PRESS ENTER>");
     getchar();
