@@ -66,6 +66,7 @@
 //    If this function must abort before entering the message loop, it
 //    returns the conventional value NULL.
 //
+
 LPSTR CommandLine;
 #pragma argsused
 int APIENTRY WinMain(HINSTANCE hInstance,
