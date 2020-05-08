@@ -3,7 +3,7 @@ object InstructionForm: TInstructionForm
   Top = 0
   Caption = 'Instrukcja'
   ClientHeight = 490
-  ClientWidth = 749
+  ClientWidth = 734
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,14 +12,14 @@ object InstructionForm: TInstructionForm
   Font.Style = []
   OldCreateOrder = False
   DesignSize = (
-    749
+    734
     490)
   PixelsPerInch = 96
   TextHeight = 13
   object InstructionRichEdit: TRichEdit
     Left = 0
     Top = 0
-    Width = 753
+    Width = 734
     Height = 452
     Anchors = [akLeft, akTop, akRight, akBottom]
     Font.Charset = EASTEUROPE_CHARSET
@@ -32,13 +32,11 @@ object InstructionForm: TInstructionForm
     ParentFont = False
     ReadOnly = True
     TabOrder = 0
-    ExplicitWidth = 809
-    ExplicitHeight = 632
   end
   object GoButton: TButton
     Left = 0
-    Top = 452
-    Width = 753
+    Top = 451
+    Width = 734
     Height = 39
     Anchors = [akLeft, akRight, akBottom]
     Caption = 'Gotowy, start!'
@@ -50,7 +48,5 @@ object InstructionForm: TInstructionForm
     ParentFont = False
     TabOrder = 1
     OnClick = GoButtonClick
-    ExplicitTop = 632
-    ExplicitWidth = 809
   end
 end
