@@ -1,4 +1,4 @@
-object Form1: TForm1
+﻿object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Start badania'
@@ -52,7 +52,7 @@ object Form1: TForm1
     Font.Style = []
     ParentFont = False
   end
-  object SpinEdit1: TSpinEdit
+  object GrupaSpinEdit: TSpinEdit
     Left = 88
     Top = 8
     Width = 73
@@ -68,7 +68,7 @@ object Form1: TForm1
     TabOrder = 0
     Value = 0
   end
-  object SpinEdit2: TSpinEdit
+  object BadanySpinEdit: TSpinEdit
     Left = 312
     Top = 8
     Width = 76
@@ -84,7 +84,7 @@ object Form1: TForm1
     TabOrder = 1
     Value = 0
   end
-  object SpinEdit3: TSpinEdit
+  object WiekSpinEdit: TSpinEdit
     Left = 88
     Top = 60
     Width = 73
@@ -100,7 +100,7 @@ object Form1: TForm1
     TabOrder = 2
     Value = 0
   end
-  object RadioGroup1: TRadioGroup
+  object PlecRadioGroup: TRadioGroup
     Left = 192
     Top = 40
     Width = 196
@@ -114,10 +114,10 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 3
   end
-  object RadioButton2: TRadioButton
-    Left = 295
+  object MeżczyznaRadioButton: TRadioButton
+    Left = 287
     Top = 67
-    Width = 74
+    Width = 90
     Height = 17
     Caption = 'M'#281#380'czyzna'
     Font.Charset = DEFAULT_CHARSET
@@ -128,7 +128,7 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 4
   end
-  object RadioButton1: TRadioButton
+  object KobietaRadioButton: TRadioButton
     Left = 208
     Top = 67
     Width = 57
@@ -155,5 +155,6 @@ object Form1: TForm1
     Font.Style = []
     ParentFont = False
     TabOrder = 6
+    OnClick = Button1Click
   end
 end
