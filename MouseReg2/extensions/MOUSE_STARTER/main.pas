@@ -11,6 +11,7 @@ var ExpName:string='AZ+LBW';
     MultiLog:string='Eksperymenty.log';
     BatchFile:string='Eksperyment.bat';
     ParPrefix:string='';//"Bad"? Chyba prefix niepotrzebny. Niech sobie Bat coœ z tym robi
+    InstructionHeight:int=700;
 
 type
   TMainForm = class(TForm)
@@ -53,6 +54,10 @@ begin
   self.BadanySpinEdit.Value:=intpom;
   Readln(inifile,intpom);
   self.WiekSpinEdit.Value:=intpom;
+  intpom:=-1;
+  Readln(inifile,intpom);
+  if intpom > -1 then
+    InstructionHeight:=intpom;
   CloseFile(inifile);
 end
 end;
