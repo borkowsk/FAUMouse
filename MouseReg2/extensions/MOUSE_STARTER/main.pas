@@ -72,7 +72,7 @@ begin
   if intpom > -1 then
     InstructionHeight:=intpom;
   if strpom<>'' then
-    InstructionForm.GoButton:=strpom;
+    InstructionForm.GoButton.Caption:=strpom;
 
   CloseFile(inifile);
 end
