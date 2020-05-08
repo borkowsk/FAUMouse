@@ -10,6 +10,7 @@ type
   TInstructionForm = class(TForm)
     InstructionRichEdit: TRichEdit;
     GoButton: TButton;
+    procedure GoButtonClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -22,5 +23,10 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TInstructionForm.GoButtonClick(Sender: TObject);
+begin
+ ModalResult=mrOk;
+end;
 
 end.

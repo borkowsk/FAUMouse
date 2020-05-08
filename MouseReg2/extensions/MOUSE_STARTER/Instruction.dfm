@@ -36,5 +36,6 @@ object InstructionForm: TInstructionForm
     Height = 25
     Caption = 'Gotowy, start!'
     TabOrder = 1
+    OnClick = GoButtonClick
   end
 end
