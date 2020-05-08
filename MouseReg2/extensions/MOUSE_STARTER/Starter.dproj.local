@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2013-10-22 13:56:17.553.pas,C:\Users\borkowsk.Matiola\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\borkowsk.Matiola\Documents\RAD Studio\Projects\main.pas</Transaction>
+    <Transaction>2013-10-22 13:56:17.553.dfm,C:\Users\borkowsk.Matiola\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\borkowsk.Matiola\Documents\RAD Studio\Projects\main.dfm</Transaction>
+    <Transaction>2013-10-22 13:57:17.714.pas,C:\Users\borkowsk.Matiola\Documents\RAD Studio\Projects\main.pas=S:\APLIKACJE\MOUSE STARTER\main.pas</Transaction>
+    <Transaction>2013-10-22 13:57:17.714.dfm,C:\Users\borkowsk.Matiola\Documents\RAD Studio\Projects\main.dfm=S:\APLIKACJE\MOUSE STARTER\main.dfm</Transaction>
+    <Transaction>2013-10-22 13:57:25.676.dproj,C:\Users\borkowsk.Matiola\Documents\RAD Studio\Projects\Project1.dproj=S:\APLIKACJE\MOUSE STARTER\Starter.dproj</Transaction>
+    <Transaction>2013-10-22 14:43:29.307.pas,S:\APLIKACJE\MOUSE STARTER\Unit2.pas=S:\APLIKACJE\MOUSE STARTER\tlo.pas</Transaction>
+    <Transaction>2013-10-22 14:43:29.307.dfm,S:\APLIKACJE\MOUSE STARTER\Unit2.dfm=S:\APLIKACJE\MOUSE STARTER\tlo.dfm</Transaction>
+    <Transaction>2013-10-24 23:45:39.257.pas,S:\APLIKACJE\MOUSE STARTER\Unit2.pas=S:\APLIKACJE\MOUSE STARTER\Instruction.pas</Transaction>
+    <Transaction>2013-10-24 23:45:39.257.dfm,S:\APLIKACJE\MOUSE STARTER\Unit2.dfm=S:\APLIKACJE\MOUSE STARTER\Instruction.dfm</Transaction>
+  </Transactions>
+</BorlandProject>
