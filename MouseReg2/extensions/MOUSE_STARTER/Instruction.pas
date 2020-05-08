@@ -11,6 +11,7 @@ type
     InstructionRichEdit: TRichEdit;
     GoButton: TButton;
     procedure GoButtonClick(Sender: TObject);
+    procedure FormResize(Sender: TObject);
   private
     { Private declarations }
   public
@@ -23,6 +24,11 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TInstructionForm.FormResize(Sender: TObject);
+begin
+ InstructionRichEdit.Repaint;
+end;
 
 procedure TInstructionForm.GoButtonClick(Sender: TObject);
 begin

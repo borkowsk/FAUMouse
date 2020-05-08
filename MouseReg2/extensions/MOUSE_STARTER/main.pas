@@ -11,6 +11,7 @@ var ExpName:string='AZ+LBW';
     MultiLog:string='Eksperymenty.log';
     BatchFile:string='Eksperyment.bat';
     ParPrefix:string='';//"Bad"? Chyba prefix niepotrzebny. Niech sobie Bat coœ z tym robi
+    InstrGoButtonText:string='';
     InstructionWidth:integer=-1;
     InstructionHeight:integer=-1;
 
@@ -53,26 +54,34 @@ begin
 
   Readln(inifile,intpom);
   self.GrupaSpinEdit.Value:=intpom;
+
   Readln(inifile,intpom);
   self.BadanySpinEdit.Value:=intpom;
+
   Readln(inifile,intpom);
   self.WiekSpinEdit.Value:=intpom;
+
   Readln(inifile,strpom);
   if strpom<>'' then
     self.StartButton.Caption:=strpom;
+
   Readln(inifile,strpom);
   if strpom<>'' then
     Instrukcja0rtf:=strpom;
+
   intpom:=-1;
   Readln(inifile,intpom);
   if intpom > -1 then
     InstructionWidth:=intpom;
+
   intpom:=-1;
   Readln(inifile,intpom);
   if intpom > -1 then
     InstructionHeight:=intpom;
+
+  Readln(inifile,strpom);
   if strpom<>'' then
-    InstructionForm.GoButton.Caption:=strpom;
+    InstrGoButtonText:=strpom;
 
   CloseFile(inifile);
 end
@@ -106,6 +115,8 @@ begin
      InstructionForm.ClientWidth:=InstructionWidth;
   if InstructionHeight>0 then
     InstructionForm.ClientHeight:=InstructionHeight;
+  if InstrGoButtonText<>'' then
+    InstructionForm.GoButton.Caption:=InstrGoButtonText;
   InstructionForm.ShowModal;
   Application.ProcessMessages;
 end;
