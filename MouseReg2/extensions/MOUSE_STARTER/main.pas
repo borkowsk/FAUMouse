@@ -102,6 +102,8 @@ end;
 if not blad then
 begin
   InstructionForm.Position:=poDesktopCenter;//poScreenCenter;
+  if InstructionWidth>0 then
+     InstructionForm.ClientWidth:=InstructionWidth;
   if InstructionHeight>0 then
     InstructionForm.ClientHeight:=InstructionHeight;
   InstructionForm.ShowModal;
