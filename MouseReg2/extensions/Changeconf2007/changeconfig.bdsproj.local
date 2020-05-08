@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2007-04-02 22:10:57.000.cpp,C:\Documents and Settings\borkowsk\Moje dokumenty\Borland Studio Projects\Unit1.cpp=S:\APLIKACJE\REGMOUSE\Changeconf\changeconf.cpp</Transaction>
+    <Transaction>2007-04-02 22:11:04.750.bdsproj,C:\Documents and Settings\borkowsk\Moje dokumenty\Borland Studio Projects\Project1.bdsproj=S:\APLIKACJE\REGMOUSE\Changeconf\changeconfig.bdsproj</Transaction>
+    <Transaction>2007-04-02 22:14:06.984.cpp,S:\APLIKACJE\REGMOUSE\Changeconf\Unit1.cpp=S:\APLIKACJE\REGMOUSE\Configini.cpp</Transaction>
+    <Transaction>2007-04-02 22:14:06.984.h,S:\APLIKACJE\REGMOUSE\Changeconf\Unit1.h=S:\APLIKACJE\REGMOUSE\Configini.h</Transaction>
+  </Transactions>
+</BorlandProject>
