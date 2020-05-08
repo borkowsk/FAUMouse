@@ -11,6 +11,7 @@ var ExpName:string='AZ+LBW';
     MultiLog:string='Eksperymenty.log';
     BatchFile:string='Eksperyment.bat';
     ParPrefix:string='';//"Bad"? Chyba prefix niepotrzebny. Niech sobie Bat coœ z tym robi
+    InstructionWidth:integer=-1;
     InstructionHeight:integer=-1;
 
 type
@@ -43,21 +44,36 @@ implementation
 procedure TMainForm.FormCreate(Sender: TObject);
 var inifile:textFile;
     intpom:integer;
+    strpom:string;
 begin
 if FileExists('starter.ini') then
 begin
   AssignFile(inifile,'starter.ini');
   Reset(inifile);
+
   Readln(inifile,intpom);
   self.GrupaSpinEdit.Value:=intpom;
   Readln(inifile,intpom);
   self.BadanySpinEdit.Value:=intpom;
   Readln(inifile,intpom);
   self.WiekSpinEdit.Value:=intpom;
+  Readln(inifile,strpom);
+  if strpom<>'' then
+    self.StartButton.Caption:=strpom;
+  Readln(inifile,strpom);
+  if strpom<>'' then
+    Instrukcja0rtf:=strpom;
+  intpom:=-1;
+  Readln(inifile,intpom);
+  if intpom > -1 then
+    InstructionWidth:=intpom;
   intpom:=-1;
   Readln(inifile,intpom);
   if intpom > -1 then
     InstructionHeight:=intpom;
+  if strpom<>'' then
+    InstructionForm.GoButton:=strpom;
+
   CloseFile(inifile);
 end
 end;
@@ -138,7 +154,6 @@ writeln(tekstowy,Instrukcja0rtf);
 writeln(tekstowy,InstructionForm.ClientWidth);
 writeln(tekstowy,InstructionForm.ClientHeight);
 writeln(tekstowy,InstructionForm.GoButton.Caption);
-
 closeFile(tekstowy);
 
 //Przygotowanie parametrów wywo³ania i start bat'cha z w³aœciwym eksperymentem
