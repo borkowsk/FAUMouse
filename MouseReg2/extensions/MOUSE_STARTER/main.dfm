@@ -14,52 +14,52 @@ object Form1: TForm1
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 25
-    Top = 16
-    Width = 43
-    Height = 19
+    Left = 8
+    Top = 8
+    Width = 52
+    Height = 23
     Caption = 'Grupa'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -16
+    Font.Height = -19
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
   end
   object Label2: TLabel
-    Left = 216
+    Left = 192
     Top = 8
-    Width = 51
-    Height = 19
+    Width = 62
+    Height = 23
     Caption = 'Badany'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -16
+    Font.Height = -19
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
   end
   object Label3: TLabel
-    Left = 32
-    Top = 63
-    Width = 34
-    Height = 19
+    Left = 8
+    Top = 60
+    Width = 40
+    Height = 23
     Caption = 'Wiek'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -16
+    Font.Height = -19
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
   end
   object SpinEdit1: TSpinEdit
-    Left = 104
+    Left = 88
     Top = 8
     Width = 73
-    Height = 26
+    Height = 29
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -13
+    Font.Height = -16
     Font.Name = 'Tahoma'
     Font.Style = []
     MaxValue = 0
@@ -69,13 +69,13 @@ object Form1: TForm1
     Value = 0
   end
   object SpinEdit2: TSpinEdit
-    Left = 320
+    Left = 312
     Top = 8
-    Width = 68
-    Height = 26
+    Width = 76
+    Height = 29
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -13
+    Font.Height = -16
     Font.Name = 'Tahoma'
     Font.Style = []
     MaxValue = 0
@@ -85,13 +85,13 @@ object Form1: TForm1
     Value = 0
   end
   object SpinEdit3: TSpinEdit
-    Left = 104
+    Left = 88
     Top = 60
     Width = 73
-    Height = 26
+    Height = 29
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -13
+    Font.Height = -16
     Font.Name = 'Tahoma'
     Font.Style = []
     MaxValue = 0
@@ -101,41 +101,59 @@ object Form1: TForm1
     Value = 0
   end
   object RadioGroup1: TRadioGroup
-    Left = 205
+    Left = 192
     Top = 40
-    Width = 183
+    Width = 196
     Height = 61
     Caption = 'P'#322'e'#263
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -13
+    Font.Height = -16
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
     TabOrder = 3
   end
   object RadioButton2: TRadioButton
-    Left = 303
+    Left = 295
     Top = 67
     Width = 74
     Height = 17
     Caption = 'M'#281#380'czyzna'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 4
   end
   object RadioButton1: TRadioButton
-    Left = 224
+    Left = 208
     Top = 67
     Width = 57
     Height = 17
     Caption = 'Kobieta'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 5
   end
   object Button1: TButton
-    Left = 25
+    Left = 8
     Top = 118
-    Width = 352
+    Width = 380
     Height = 41
     Caption = 'Gotowe'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 6
   end
 end
