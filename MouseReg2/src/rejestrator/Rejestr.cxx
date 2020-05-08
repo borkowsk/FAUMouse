@@ -9,7 +9,7 @@
 //    Globals.h Contains the definitions of the structures and dispatch.c
 //      contains the functions that use these structures.
 //
-
+const char* PROGRAM_NAME="Mouse Paradigm Registrator. Version 3.51 Compilation "__DATE__ " " __TIME__;
 
 #include <windows.h>            // required for all Windows applications
 #include <windowsx.h>
@@ -51,53 +51,79 @@ struct RegRec{
 extern LPSTR CommandLine;
 static RegRec* RegTab=NULL;
 static size_t  position=0;
-static char soundfile[256];
-static char targetfile[256];
-static char outputfile[256];
-static char infofile[256];
-static char prompt[1024];
-static char description[1024];
+
+static char soundfile[256]="";
+static char targetfile[256]="";
+static char outputfile[256]="";
+static char infofile[256]="";
+static char soundinfo[256]="";
+static char prompt[1024]="";
+static char description[1024]="";
+
 static UINT AppendOutput=0;
-static UINT TimerStep=100;
+
 static UINT click=0;
 static UINT score=0;
+static UINT status=0;
 static UINT maxtime=0;
 static  INT mousex=0;
 static  INT mousey=0;
 static  INT mouseb=0;
 static  int ScreenX=0;
 static  int ScreenY=0;
-static COLORREF WindowBackground=0xff0000;
+//KOLORY W FORMACIE   B R G   !!!
+const DEFAULT_BACKGROUND=0x0f0f0f;
+const DEFAULT_FOREGROUND=0xf0f0f0;
+static COLORREF WindowBackground=DEFAULT_BACKGROUND;
+static COLORREF WindowForeground=DEFAULT_FOREGROUND;
 
 // Global variables. Handlers, counters etc
-
-static UINT idTimer=0;     //  timer ID
-static HANDLE dib=NULL;	   // Bacground bitmap handle	
-static  INT mciOpen=0;          
+#define TIMERID			((UINT) 't')	//Identyfikator glownego timera aplikacji
+static UINT TimerStep=100;
+static	UINT idTimer=0;				//  timer ID
 static int  nTimerCount = 0;        //  current timer count
 static int  nScoreCount = 0;        //  current score count
-#define TIMERID ((UINT) 't')
+
+static	HANDLE dib=NULL;			// Bacground bitmap handle
+#define PICTTIMERID		((UINT) 'p')//Identyfikator znikajacego obrazka
+static  int  StartPictLife=55;		//Czas po jakim pojawia sie obrazek
+static  int  PictLive=-1;			//Czas zycia obrazka. Win NT ma rozdzielczosc 10ms, Win 95 okolo 55ms
+static	UINT idPictTimer=0;			// picture lifetime ID
+static	DWORD clock1=0;				//Control clock tics for picture lifetime (start)
+static	DWORD clock2=0;				//....(end)
+
+static  INT mciOpen=0;          
+
 
 //extern wb_about(char*);
-#include "autor.h"
+//#include "autor.h"
+extern HWND		 WB_Hwnd;			//W init????
+extern "C"  void StartAboutDialog();
 
 void UpdateStatusLine(HWND hwnd)
 {
-	char bigbufor[1024];
-	char bufor[18];
-   wsprintf(
+    char bigbufor[1024];
+    char bufor[18];
+    if(status)
+    {
+        wsprintf(
             bigbufor,
             "%s x=%d y=%d buttons=%d clock=%d ms %s%s",
-			prompt,
-			mousex,
-			mousey,
-			mouseb,
+            prompt,
+            mousex,
+            mousey,
+            mouseb,
             nTimerCount,
-			score?"score=":"",
-			score?ltoa(nScoreCount,bufor,10):""
-        );
-
-   SetWindowText(hwnd,bigbufor);
+            score?"score=":"",
+            score?ltoa(nScoreCount,bufor,10):""
+            );
+    }
+    else
+    {
+        wsprintf(bigbufor,"%s",prompt);
+    }
+    
+    SetWindowText(hwnd,bigbufor);
 }
 
 
@@ -220,78 +246,112 @@ LRESULT MsgCommand(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
     return lRet;
 }
 
-//Function to Display info file
-void InfoFileBox(HWND hwnd,char* infofile)
-{
-char* text=	NULL;
-// "a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z\n"
-//"b\nc\nd\ne\nf\ng\nh\n\i\nj\nk\nl\nm\nn\no\np\nq\nr\ns\nt\nu\nv\nw\nx\ny\nz\n";
-size_t size=0;
-FILE* file=fopen(infofile,"rb");
-if(file==NULL)
-	goto LERROR;
-fseek(file,0,SEEK_END);
-size=ftell(file);
-fseek(file,0,SEEK_SET);
-text=new char[size+2];
-if(text==NULL)
-	goto LERROR;
-fread(text,1,size,file);
-text[size]='\0';
-fclose(file);
-MessageBox(0,text,"Read information!",MB_ICONINFORMATION);
-delete text;
-return;
-LERROR:
-{
-char bufor[1024];
-sprintf(bufor,"\"%s\" on file \"%s\" ",infofile,strerror(errno));
-MessageBox(0,bufor,"Error reading information file",MB_ICONERROR);
-}
-if(file) fclose(file);
-if(text) delete text;
-SendMessage(hwnd,WM_CLOSE,0,0);
-}
-
+//Function too start sound (WAV) - jeden dzwiek w danej chwili z programu!!!
 int PlayInfoSound(HWND hwnd,char* soundfile)
 {
-DWORD ret;
-#ifdef _DEBUG
-return 0;
+    assert(mciOpen==0);
+    DWORD ret;
+#ifdef NNNNNNN_DEBUG
+    return 0;
 #endif
-char bufor[1024]="\0";	
-char lpszReturnString[128]="\0";
-char lpszErrorString[128]="\0";
-sprintf(bufor,"open %s type waveaudio alias finch",soundfile);
-ret=mciSendString(bufor,lpszReturnString, sizeof(lpszReturnString)-1, NULL);
-if(ret) goto LERROR;
-ret=mciSendString("set finch time format samples", lpszReturnString, 
-				sizeof(lpszReturnString)-1, NULL);
-if(ret) goto LERROR;
-ret=mciSendString("play finch", lpszReturnString, 
-				sizeof(lpszReturnString)-1, NULL);
-if(ret) goto LERROR;
-return 1;
+    char bufor[1024]="\0";	
+    char lpszReturnString[128]="\0";
+    char lpszErrorString[128]="\0";
+    sprintf(bufor,"open %s type waveaudio alias finch",soundfile);
+    ret=mciSendString(bufor,lpszReturnString, sizeof(lpszReturnString)-1, NULL);
+    if(ret) goto LERROR;
+    ret=mciSendString("set finch time format samples", lpszReturnString, 
+        sizeof(lpszReturnString)-1, NULL);
+    if(ret) goto LERROR;
+    ret=mciSendString("play finch", lpszReturnString, 
+        sizeof(lpszReturnString)-1, NULL);
+    if(ret) goto LERROR;
+    return mciOpen=1;
 LERROR:
-if(!mciGetErrorString(ret,lpszErrorString, sizeof(lpszErrorString)-1))
-			*lpszErrorString='\0';
-sprintf(bufor,"\"%s\":%s on file \"%s\" ", lpszReturnString,lpszErrorString,soundfile);
-return 0;
+    if(!mciGetErrorString(ret,lpszErrorString, sizeof(lpszErrorString)-1))
+        *lpszErrorString='\0';
+    sprintf(bufor,"\"%s\":%s on file \"%s\" ", lpszReturnString,lpszErrorString,soundfile);
+    return 0;
+} 
+
+//Function too break sound (WAV)
+void EndSound()
+{
+char	lpszReturnString[128];
+if(mciOpen)
+	mciSendString("close finch", lpszReturnString,sizeof(lpszReturnString)-1, NULL);
+mciOpen=0;
 }
+
+//Function to Display info file
+void InfoFileBox(HWND hwnd,char* infofile="",char* soundfile=NULL)
+{
+    char* text=	NULL;
+    // "a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z\n"
+    //"b\nc\nd\ne\nf\ng\nh\n\i\nj\nk\nl\nm\nn\no\np\nq\nr\ns\nt\nu\nv\nw\nx\ny\nz\n";
+    size_t size=0;
+    FILE* file=fopen(infofile,"rb");
+    if(file==NULL)
+    {
+        if(infofile[0]='\0')
+            text=clone_str("Press OK when ready.");
+        else
+            goto LERROR;
+    }
+    else
+    {
+        fseek(file,0,SEEK_END);
+        size=ftell(file);
+        fseek(file,0,SEEK_SET);
+        text=new char[size+2];
+        if(text==NULL)
+            goto LERROR;
+        fread(text,1,size,file);
+        text[size]='\0';
+        fclose(file);
+    }
+    
+    if(soundfile!=NULL && soundfile[0]!='\0')
+        PlayInfoSound(hwnd,soundfile);
+    
+    MessageBox(hwnd,text,"INSTRUCTION!",MB_ICONINFORMATION);
+    
+    if(soundfile)
+        EndSound();
+    
+    delete text;
+    return;
+LERROR:
+    {
+        char bufor[1024];
+        sprintf(bufor,"\"%s\" on file \"%s\" ",infofile,strerror(errno));
+        MessageBox(hwnd,bufor,"Error reading information file",MB_ICONERROR);
+    }
+    if(file) fclose(file);
+    if(text) delete text;
+    SendMessage(hwnd,WM_CLOSE,0,0);
+}
+
 
 int AllocTable(HWND hwnd)
 {
-//32 bity musza byc!
-assert(sizeof(size_t)>=4);
-maxtime*=1000;
-size_t size=(maxtime/TimerStep)+10;//z rezerwa
-RegTab=new RegRec[size];
-if(RegTab!=NULL)
-	return 1;
-LERROR:
-MessageBox(0,strerror(errno),"Error saving data",MB_ICONERROR);
-SendMessage(hwnd,WM_CLOSE,0,0);
-return 0;
+    //32 bity musza byc!
+    assert(sizeof(size_t)>=4);
+    maxtime*=1000;
+    
+    size_t size=(maxtime/TimerStep)+10;//z rezerwa
+    RegTab=new RegRec[size];
+    if(RegTab!=NULL)
+    {
+        return 1;
+    }
+    else
+    {
+        MessageBox(hwnd,strerror(errno),"No memory for registration log.",MB_ICONERROR);
+        SendMessage(hwnd,WM_CLOSE,0,0);
+        return 0;
+    }
+    
 }
 
 int SaveDataAndCleanup(HWND hwnd)
@@ -310,7 +370,7 @@ if(AppendOutput)
 	{
 	if((file=fopen(outputfile,"at"))==NULL)
 		{
-		sprintf(bufor,"Fatal! Can't store data! %s",strerror(errno));
+		sprintf(bufor,"Fatal error! Program can not append data to %s",strerror(errno));
 		goto LERROR;
 		}
 	}
@@ -318,7 +378,7 @@ if(AppendOutput)
 	{
 	if((file=fopen(outputfile,"wt"))==NULL)
 		{
-		sprintf(bufor,"Fatal! Can't store data! %s",strerror(errno));
+		sprintf(bufor,"Fatal error! Program can not store data in %s",strerror(errno));
 		goto LERROR;
 		}
 	}
@@ -344,7 +404,7 @@ fclose(file);
 delete RegTab;
 return 1;
 LERROR:
-MessageBox(0,bufor,"Error saving data",MB_ICONERROR);
+MessageBox(hwnd,bufor,"Error saving data",MB_ICONERROR);
 return 0;
 }
 
@@ -367,10 +427,10 @@ return 0;
 //
 //
 
-#pragma argsused
+//#pragma argsused
 LRESULT MsgCreate(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 { 
-	char lpszReturnString[128]="\0";
+	char lpszReturnString[256]="\0";
 	int marker=0xabef;
 	char* emptypar="";  
 	HDC		wDc=GetDC(hwnd);
@@ -381,56 +441,75 @@ LRESULT MsgCreate(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 	ifstream config_input(CommandLine,ios::nocreate);
 	if(config_input.is_open()==0)
 		{
-		sprintf(lpszReturnString,"Can't open parameters file \"%s\" ",CommandLine);
+        if(*CommandLine=='\0')
+            sprintf(lpszReturnString,"The configuration file must be provided.\n\n  USAGE:\n"
+                                     "mousereg2004.exe regconfig.ini"
+                                     "\n\n Use a command prompt window or windows shortcuts.");
+            else
+		    sprintf(lpszReturnString,"The parameters file \"%s\" can not be open. ",CommandLine);            
+        StartAboutDialog();
 		goto L_ERROR;
 		}
 		else
 		{
 		config_resources params(config_input,1,&emptypar);//Nie bierze lini polecen!
 		config_input.close();
-		if(strcmp("Yes", params("logo") )==0)
-				wb_about("Windows Mouse Registrator");
 		
-		if((WindowBackground=strtoul( params("background"),NULL,0 ))==0)
-						WindowBackground=0x0f0f0f;
-		if((TimerStep=strtoul( params("step"),NULL,0 ))<50)
+		if(strcmp("Yes", params("logo").get() )==0)
+			            StartAboutDialog();//ShellAbout(WB_Hwnd,window_name,bufor,hIcon);
+		//DEFAULT_BACKGROUND=0x0f0f0f;
+        //DEFAULT_FOREGROUND=0xf0f0f0;
+		if((WindowBackground=strtoul( params("background").get(),NULL,0 ))==0)
+						WindowBackground=DEFAULT_BACKGROUND;
+		
+		if((WindowForeground=strtoul( params("foreground").get(),NULL,0 ))==0)
+						WindowForeground=DEFAULT_FOREGROUND;
+
+		if((TimerStep=strtoul( params("step").get(),NULL,0 ))<50)
 			{
 			sprintf(lpszReturnString,"The step value  %ld is too small.",TimerStep);
 			assert(marker==0xabef);
 			goto L_ERROR;
 			}
-		if((maxtime=strtoul( params("maxtime"),NULL,0 ))*1000<TimerStep)
+		
+		if((maxtime=strtoul( params("maxtime").get(),NULL,0 ))*1000<TimerStep)
 			{
 			sprintf(lpszReturnString,"The maximum time value  %ld is too small.",TimerStep);
 			assert(marker==0xabef);
 			goto L_ERROR;
 			}
-		strncpy(soundfile,params("sound"),sizeof(soundfile));
-		strncpy(targetfile,params("target"),sizeof(targetfile));
-		strncpy(outputfile,params("output"),sizeof(outputfile));
-		strncpy(infofile,params("information"),sizeof(infofile));
-		strncpy(description,params("description"),sizeof(description));
+		
+		strncpy(soundfile,params("sound").get(),sizeof(soundfile));
+		strncpy(targetfile,params("target").get(),sizeof(targetfile));
+		strncpy(infofile,params("information").get(),sizeof(infofile));
+		strncpy(soundinfo,params("soundinfo").get(),sizeof(soundfile));
+		strncpy(description,params("description").get(),sizeof(description));
+
+		strncpy(outputfile,params("output").get(),sizeof(outputfile));
+		if(outputfile[0]=='\0')
+			{
+			sprintf(lpszReturnString,"Output-file-name is required!");
+			assert(marker==0xabef);
+			goto L_ERROR;
+			}
+		
 		if(access(outputfile,2)==-1 && errno==EACCES)
 			{
 			sprintf(lpszReturnString,"File %s has't write permission",outputfile);
 			assert(marker==0xabef);
 			goto L_ERROR;
 			}
-		strncpy(prompt,params("prompttext"),sizeof(prompt));
-		click=strcmp("Yes",params("click"))==0;
-		score=strcmp("Yes",params("score"))==0;
-		AppendOutput=strcmp("Yes",params("append"))==0;
+		
+        strncpy(prompt,params("prompttext").get(),sizeof(prompt));
+
+		click=strcmp("Yes",params("click").get())==0;
+		score=strcmp("Yes",params("score").get())==0;
+        status=strcmp("Yes",params("status").get())==0;
+
+		AppendOutput=strcmp("Yes",params("append").get())==0;
 
 		//Prepare window for experiment
 		//------------------------------------	
-		SetWindowText(hwnd,prompt);
-		//Display info text
-
-		if(!AllocTable(hwnd))
-				return 0;
-
-		if(strlen(infofile)>0)
-			InfoFileBox(hwnd,infofile);
 		
 		if(strlen(targetfile)>0)
 			{
@@ -442,10 +521,19 @@ LRESULT MsgCreate(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 					goto L_ERROR;
 					}
 			}
+		
+		SetWindowText(hwnd,prompt);
 
-		//Start MCI sound
+		//Display info text
+		if(!AllocTable(hwnd))
+				return 0;
+
+		if(strlen(infofile)>0)
+			InfoFileBox(hwnd,infofile,soundinfo);
+		
+		//Start MCI paralel sound
 		if(strlen(soundfile)>0)
-			mciOpen=PlayInfoSound(hwnd,soundfile);		
+			PlayInfoSound(hwnd,soundfile);		
 	
 		// Set the timer for   TimerStep intervals
 		mousex=ScreenX/2;
@@ -458,10 +546,11 @@ LRESULT MsgCreate(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 		SetCursorPos(mousex,mousey);
 		}
 
+	//SetCapture(hwnd); //Nie dziala zgodnie z oczekiwaniami
 	return 0;
 
 L_ERROR:
-MessageBox(0,lpszReturnString,"Error reading parameters",MB_ICONERROR);
+MessageBox(hwnd,lpszReturnString,"Error reading parameters",MB_ICONERROR);
 DestroyWindow(hwnd);
 return 0;
 }
@@ -484,14 +573,14 @@ return 0;
 //
 //
 
-#pragma argsused
+//#pragma argsused
 LRESULT MsgPaint(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 {
     PAINTSTRUCT ps;
 	BITMAPINFOHEADER info;
-    RECT rect;
+
     HDC hdc = BeginPaint(hwnd, &ps);
-	HANDLE brush=CreateSolidBrush(WindowBackground);
+	HBRUSH brush=CreateSolidBrush(WindowBackground);
  
 	SetBkColor(hdc,WindowBackground);
     //MessageBeep(MB_ICONQUESTION);
@@ -500,88 +589,100 @@ LRESULT MsgPaint(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 
 	if(dib==NULL)
 			{
-			Ellipse(hdc,ScreenX/2-ScreenX/4,
-						ScreenY/2-ScreenY/4,
-						ScreenX/2+ScreenX/4,
-						ScreenY/2+ScreenY/4);
+			HANDLE brush=CreateSolidBrush(WindowForeground);
+			HANDLE old=SelectObject(hdc,brush);
+            unsigned R=ScreenX/60;
+			Ellipse(hdc,ScreenX/2-R,
+						ScreenY/2-R,
+						ScreenX/2+R,
+						ScreenY/2+R);
+			SelectObject(hdc,old);
+			DeleteObject(brush);
 			}
 			else
-			{
-			DibInfo(dib,&info);
+				if(nTimerCount>StartPictLife && PictLive!=0 )//Tylko gdyby sie zmazalo przedwczesnie
+				{
+					DibInfo(dib,&info);
+					
+					DibBlt(hdc,ScreenX/2-info.biWidth/2,
+						ScreenY/2-info.biHeight/2,
+						//small_rc.left+15,small_rc.top+15,
+						info.biWidth,info.biHeight,
+						dib,0,0,SRCINVERT //Use only on error!
+						);
+				}
 			
-			/*
-			if(rc.bottom<info.biHeight)
-					rc.bottom=info.biHeight;
-			if(rc.right<info.biWidth)
-					rc.right=info.biWidth;
-			small_rc.top=(rand()/(double)RAND_MAX)*(rc.bottom-info.biHeight)-15;
-			small_rc.left=(rand()/(double)RAND_MAX)*(rc.right-info.biWidth)-15;
-			small_rc.right=small_rc.left+info.biWidth+30;
-			small_rc.bottom=small_rc.top+info.biHeight+30;	
-			*/
-         
-		    DibBlt(hdc,ScreenX/2-info.biWidth/2,
+	EndPaint(hwnd,&ps);
+
+    return 0;
+}
+
+//
+// For view picture
+//
+void ViewPicture(HWND hwnd)
+{
+	BITMAPINFOHEADER info;
+ 
+    HDC hdc = GetDC(hwnd);
+
+	DibInfo(dib,&info);
+			
+	DibBlt(hdc,ScreenX/2-info.biWidth/2,
 						ScreenY/2-info.biHeight/2,
 				//small_rc.left+15,small_rc.top+15,
 				info.biWidth,info.biHeight,
 				dib,0,0,SRCINVERT //Use only on error!
 				);
-			}
-			
-	/*
-    if (IntersectRect(&rect, &rectMouse, &ps.rcPaint))
-        TextOut(
-            hdc,
-            rectMouse.left, rectMouse.top,
-            MouseText, strlen(MouseText)
-        );
-	*/
-    EndPaint(hwnd, &ps);
 
-    return 0;
-}
-
-
-
-//
-//  FUNCTION: MsgDestroy(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE: Kills the timer and posts the quit message.
-//
-//  PARAMETERS:
-//    hwnd      - Window handle
-//    uMessage  - WM_DESTROY (Unused)
-//    wparam    - Extra data (Unused)
-//    lparam    - Extra data (Unused)
-//
-//  RETURN VALUE:
-//    Always returns 0 - Message handled
-//
-//  COMMENTS:
-//
-//
-
-#pragma argsused
-LRESULT MsgDestroy(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
-{
-	char	lpszReturnString[128];
+	ReleaseDC(hwnd,hdc);
 	
-	if(RegTab)
-		SaveDataAndCleanup(hwnd);
-  
-    if(mciOpen)
-		mciSendString("close finch", lpszReturnString, 
-		sizeof(lpszReturnString)-1, NULL);
-
-    if(dib)
-		GlobalFree(dib);		//Free bacground bitmap
-
-    KillTimer(hwnd, idTimer);       // Stops the timer
-
-    PostQuitMessage(0);
-
-	 return 0;
+	if(PictLive>0 && idPictTimer==0)
+		{
+		clock1=GetTickCount();
+		idPictTimer =  SetTimer(hwnd, PICTTIMERID, PictLive , NULL);
+		DWORD clockp=GetTickCount();
+		}
 }
+
+
+//
+// For cleaning picture
+//
+void CleanPicture(HWND hwnd)
+{
+	//PAINTSTRUCT ps;
+	BITMAPINFOHEADER info;
+    RECT small_rc;//rectangle on picture
+    HDC hdc = GetDC(hwnd);
+	HBRUSH brush=CreateSolidBrush(WindowBackground);
+//	HBRUSH brush=CreateSolidBrush(WindowForeground);
+	
+	DibInfo(dib,&info);
+	/*
+	small_rc.top=0;
+	small_rc.left=0;
+	small_rc.right=10;
+	small_rc.bottom=10;
+	*/		
+	small_rc.top=ScreenY/2-info.biHeight/2;
+	small_rc.left=ScreenX/2-info.biWidth/2;
+	small_rc.right=ScreenX/2+info.biWidth/2;
+	small_rc.bottom=ScreenY/2+info.biHeight/2;
+	
+	FillRect (hdc,&small_rc,brush ); 
+	
+	PictLive=0;//Juz po
+	DeleteObject(brush);
+	ReleaseDC(hwnd,hdc);
+
+	clock2=GetTickCount();
+	double pom=clock2-clock1;
+
+//	fprintf(stderr,"%g\n",pom);
+}
+
+
 
 //
 //  FUNCTION: MsgTimer(HWND, UINT, WPARAM, LPARAM)
@@ -601,9 +702,11 @@ LRESULT MsgDestroy(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 //
 //
 
-#pragma argsused
+//#pragma argsused
 LRESULT MsgTimer(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 {
+	static picture_on_screen=0;
+
     if ( wparam == TIMERID ) 
 		{
 		nTimerCount += TimerStep;
@@ -622,15 +725,63 @@ LRESULT MsgTimer(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 		rec->X=mousex;
 		rec->Y=mousey;
 		position++;
-
-		//		InvalidateRect(hwnd, &rectTimer, TRUE);
-
 		
+		if(nTimerCount>StartPictLife && PictLive!=0 && picture_on_screen==0)
+			{
+				//Jesli sytuacja juz dojrzala
+				ViewPicture(hwnd);
+				picture_on_screen=1;
+			}
+		}
+	else
+		if( wparam == PICTTIMERID && dib!=NULL)//Timer usuwania obrazka
+		{
+			CleanPicture(hwnd);
+			KillTimer(hwnd,idPictTimer);
+			idPictTimer=0;
 		}
 
     return 0;
 }
 
+//
+//  FUNCTION: MsgDestroy(HWND, UINT, WPARAM, LPARAM)
+//
+//  PURPOSE: Kills the timer and posts the quit message.
+//
+//  PARAMETERS:
+//    hwnd      - Window handle
+//    uMessage  - WM_DESTROY (Unused)
+//    wparam    - Extra data (Unused)
+//    lparam    - Extra data (Unused)
+//
+//  RETURN VALUE:
+//    Always returns 0 - Message handled
+//
+//  COMMENTS:
+//
+//
+
+//#pragma argsused
+LRESULT MsgDestroy(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
+{
+	
+	//ReleaseCapture();
+
+	if(RegTab)
+		SaveDataAndCleanup(hwnd);
+
+	EndSound();
+
+    if(dib)
+		GlobalFree(dib);		//Free bacground bitmap
+
+    KillTimer(hwnd, idTimer);       // Stops the timer
+
+    PostQuitMessage(0);
+
+	 return 0;
+}
 
 
 //
@@ -653,7 +804,7 @@ LRESULT MsgTimer(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 //
 //
 
-#pragma argsused
+//#pragma argsused
 LRESULT MsgMouseMove(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 {
 
@@ -690,29 +841,29 @@ LRESULT MsgMouseMove(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 //
 //
 
-#pragma argsused
+//#pragma argsused
 LRESULT MsgLButtonDown(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 {
-	 wsprintf(
-		  ButtonText,
-		  "WM_LBUTTONDOWN: %x, %d, %d",
-		  wparam, LOWORD(lparam), HIWORD(lparam)
-	 );
-	// InvalidateRect(hwnd, &rectButton, TRUE);
-	mouseb|=0x1;
-	
-	if(score)
-		{
-		nScoreCount++;
-		UpdateStatusLine(hwnd);
-		}
-
-	if(click)
-		{
-		SetWindowText(hwnd,prompt);
-		SendMessage(hwnd,WM_CLOSE,0,0);
-		}
-		
+    wsprintf(
+        ButtonText,
+        "WM_LBUTTONDOWN: %x, %d, %d",
+        wparam, LOWORD(lparam), HIWORD(lparam)
+        );
+    // InvalidateRect(hwnd, &rectButton, TRUE);
+    mouseb|=0x1;
+    
+    if(score)
+    {
+        nScoreCount++;
+        UpdateStatusLine(hwnd);
+    }
+    
+    if(click)
+    {
+        SetWindowText(hwnd,prompt);
+        SendMessage(hwnd,WM_CLOSE,0,0);
+    }
+    
     return 0;
 }
 
@@ -738,7 +889,7 @@ LRESULT MsgLButtonDown(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 //
 //
 
-#pragma argsused
+//#pragma argsused
 LRESULT MsgLButtonUp(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 {
 	 wsprintf(
@@ -771,7 +922,7 @@ LRESULT MsgLButtonUp(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 //
 //
 
-#pragma argsused
+//#pragma argsused
 LRESULT MsgLButtonDoubleClick
 	 (HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 {
@@ -806,30 +957,30 @@ LRESULT MsgLButtonDoubleClick
 //
 //
 
-#pragma argsused
+//#pragma argsused
 LRESULT MsgRButtonDown(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 {
-	 wsprintf(
-		  ButtonText,
-		  "WM_RBUTTONDOWN: %x, %d, %d",
+    wsprintf(
+        ButtonText,
+        "WM_RBUTTONDOWN: %x, %d, %d",
         wparam, LOWORD(lparam), HIWORD(lparam)
-    );
-  //  InvalidateRect(hwnd, &rectButton, TRUE);
-	mouseb|=0x2;
-	
-	if(score)
-		{
-		nScoreCount--;
-		UpdateStatusLine(hwnd);
-		}
-
-	if(click)
-		{
-		SetWindowText(hwnd,prompt);
-		SendMessage(hwnd,WM_CLOSE,0,0);
-		}
+        );
+    //  InvalidateRect(hwnd, &rectButton, TRUE);
+    mouseb|=0x2;
     
-	return 0;
+    if(score)
+    {
+        nScoreCount--;
+        UpdateStatusLine(hwnd);
+    }
+    
+    if(click)
+    {
+        SetWindowText(hwnd,prompt);
+        SendMessage(hwnd,WM_CLOSE,0,0);
+    }
+    
+    return 0;
 }
 
 
@@ -853,7 +1004,7 @@ LRESULT MsgRButtonDown(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 //
 //
 
-#pragma argsused
+//#pragma argsused
 LRESULT MsgRButtonUp(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 {
 	 wsprintf(
@@ -887,7 +1038,7 @@ LRESULT MsgRButtonUp(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 //
 //
 
-#pragma argsused
+//#pragma argsused
 LRESULT MsgRButtonDoubleClick
 	 (HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 {
@@ -920,7 +1071,7 @@ LRESULT MsgRButtonDoubleClick
 //
 //
 
-#pragma argsused
+//#pragma argsused
 LRESULT MsgKeyDown(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 {
     wsprintf(
@@ -952,7 +1103,7 @@ LRESULT MsgKeyDown(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 //
 //
 
-#pragma argsused
+//#pragma argsused
 LRESULT MsgKeyUp(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 {
     wsprintf(
@@ -984,7 +1135,7 @@ LRESULT MsgKeyUp(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 //
 //
 
-#pragma argsused
+//#pragma argsused
 LRESULT MsgChar(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 {
     wsprintf(
@@ -1017,7 +1168,7 @@ LRESULT MsgChar(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 //
 //
 
-#pragma argsused
+//#pragma argsused
 LRESULT MsgScroll(HWND hwnd, UINT uMessage, WPARAM wparam, LPARAM lparam)
 {
 	 char *szDirection;

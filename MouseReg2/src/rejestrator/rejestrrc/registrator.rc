@@ -1,0 +1,216 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral (Default) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUD)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
+#pragma code_page(1250)
+#endif //_WIN32
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 0,5,1,0
+ PRODUCTVERSION 2005,0,5,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x2bL
+#else
+ FILEFLAGS 0x2aL
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041504e2"
+        BEGIN
+            VALUE "Comments", "Programmed by: Wojciech Borkowski, Warsaw University\0"
+            VALUE "CompanyName", "Warsaw University & Florida Atlantic University\0"
+            VALUE "FileDescription", "Mouse paradigm package\0"
+            VALUE "FileVersion", "Version 2005  (3.51)\0"
+            VALUE "InternalName", "MouseParRegistrator\0"
+            VALUE "LegalCopyright", "Copyright © ISS UW & FAU 1996,1997,1998,2002,2004,2005\0"
+            VALUE "LegalTrademarks", "Microsoft® is a registered trademark of Microsoft Corporation. Windows(TM) is a trademark of Microsoft Corporation\0"
+            VALUE "OriginalFilename", "mouserag\0"
+            VALUE "PrivateBuild", "FOR TESTING\0"
+            VALUE "ProductName", "Mouse Paradigm 2004\0"
+            VALUE "ProductVersion", "Version 2004 (v. 3 release 0.51)\0"
+            VALUE "SpecialBuild", "FOR USING UNDER ENCLOSED LICENCE\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x415, 1250
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_APPICON             ICON    DISCARDABLE     "REJESTR.ICO"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_APPNAME             "Analyser"
+    IDS_DESCRIPTION         "Mouse Paradigm Registrator"
+END
+
+#endif    // Neutral (Default) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Polish resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_PLK)
+#ifdef _WIN32
+LANGUAGE LANG_POLISH, SUBLANG_DEFAULT
+#pragma code_page(1250)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOG_ABOUT DIALOGEX 0, 0, 333, 282
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About THE MOUSE PARADIGM 2004 package"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",1,149,252,50,14
+    CTEXT           " (c) Version 2004 (3.51)",IDC_STATIC,115,51,109,12
+    CONTROL         103,112,"Static",SS_BITMAP | SS_CENTERIMAGE | 
+                    SS_REALSIZEIMAGE,62,223,58,54,WS_EX_TRANSPARENT
+    CONTROL         102,110,"Static",SS_BITMAP | SS_CENTERIMAGE | 
+                    SS_REALSIZEIMAGE,269,223,58,54,WS_EX_TRANSPARENT
+    CTEXT           "The Mouse Paradigm:",IDC_STATIC,40,15,264,11
+    CONTROL         106,IDC_STATIC,"Static",SS_BITMAP,5,222,55,55
+    LTEXT           "A Method for the Collection and Analysis of Self-Report Time Series Data",
+                    IDC_STATIC,59,34,229,8
+    LTEXT           "Designed by:",IDC_STATIC,152,73,42,8
+    CTEXT           "Andrzej Nowak             Robin R. Vallacher",
+                    IDC_STATIC,103,92,134,8
+    CTEXT           "Warsaw University                 Florida Atlantic University",
+                    IDC_STATIC,88,108,172,8
+    CTEXT           "Programmed by: Wojciech Borkowski Warsaw University",
+                    IDC_STATIC,135,129,67,34
+    LTEXT           "Consult the licence.pdf in the package directory!",
+                    IDC_STATIC,97,172,153,8
+    CTEXT           "By clicking the OK button, the user indicates that he or she has read and agreed to these conditions.",
+                    IDC_STATIC,73,188,194,26
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_DIALOG_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 5
+        RIGHTMARGIN, 327
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 277
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Polish resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP2             BITMAP  DISCARDABLE     "iss_sign.bmp"
+IDB_BITMAP3             BITMAP  DISCARDABLE     "uw_logo.bmp"
+IDB_BITMAP1             BITMAP  DISCARDABLE     "fau_logo.bmp"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
