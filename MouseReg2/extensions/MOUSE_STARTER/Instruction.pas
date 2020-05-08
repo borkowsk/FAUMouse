@@ -26,7 +26,7 @@ implementation
 
 procedure TInstructionForm.GoButtonClick(Sender: TObject);
 begin
- ModalResult=mrOk;
+ ModalResult:=mrOk;
 end;
 
 end.
