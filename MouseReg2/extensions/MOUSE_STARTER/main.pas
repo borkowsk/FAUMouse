@@ -133,7 +133,12 @@ Rewrite(tekstowy);
 writeln(tekstowy,GrupaSpinEdit.Value);
 writeln(tekstowy,BadanySpinEdit.Value);
 writeln(tekstowy,self.WiekSpinEdit.Value);
+writeln(tekstowy,self.StartButton.Caption);
+writeln(tekstowy,Instrukcja0rtf);
+writeln(tekstowy,InstructionForm.ClientWidth);
 writeln(tekstowy,InstructionForm.ClientHeight);
+writeln(tekstowy,InstructionForm.GoButton.Caption);
+
 closeFile(tekstowy);
 
 //Przygotowanie parametrów wywo³ania i start bat'cha z w³aœciwym eksperymentem
