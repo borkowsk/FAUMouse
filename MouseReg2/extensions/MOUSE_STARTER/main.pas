@@ -11,7 +11,7 @@ var ExpName:string='AZ+LBW';
     MultiLog:string='Eksperymenty.log';
     BatchFile:string='Eksperyment.bat';
     ParPrefix:string='';//"Bad"? Chyba prefix niepotrzebny. Niech sobie Bat coœ z tym robi
-    InstructionHeight:int=700;
+    InstructionHeight:integer=-1;
 
 type
   TMainForm = class(TForm)
@@ -86,6 +86,8 @@ end;
 if not blad then
 begin
   InstructionForm.Position:=poDesktopCenter;//poScreenCenter;
+  if InstructionHeight>0 then
+    InstructionForm.ClientHeight:=InstructionHeight;
   InstructionForm.ShowModal;
   Application.ProcessMessages;
 end;
