@@ -68,14 +68,14 @@
 //
 
 LPSTR CommandLine;
-#pragma argsused
+//#pragma argsused
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance, //global
                      LPSTR     lpCmdLine, 
                      int       nCmdShow)
 {
     MSG msg;
-    HANDLE hAccelTable;
+    HACCEL hAccelTable;
     //Init global wariable
 	CommandLine=lpCmdLine;
 

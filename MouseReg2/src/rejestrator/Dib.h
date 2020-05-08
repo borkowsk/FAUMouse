@@ -38,7 +38,7 @@ typedef    POINTS       MPOINT         ;
 #define GET_WM_VSCROLL_POS(wp, lp)      HIWORD(wp)
 #define GET_WM_HSCROLL_CODE(wp, lp)     LOWORD(wp)
 #define GET_WM_HSCROLL_POS(wp, lp)      HIWORD(wp)
-#define GET_EM_SETSEL_MPS(iStart, iEnd) (UINT)(iStart), (LONG)(iEnd)
+//#define GET_EM_SETSEL_MPS(iStart, iEnd) (UINT)(iStart), (LONG)(iEnd)
 #define GET_WM_COMMAND_CMD(wp, lp)      HIWORD(wp)
 #define MAKEMPOINT(l)                   (*((MPOINT *)&(l)))
 #define HUGE_T

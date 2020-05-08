@@ -14,7 +14,7 @@
 //    InitInstance() - Saves instance handle and creates main window.
 //
 //  COMMENTS:
-//
+// 
 
 #include <windows.h>            // required for all Windows applications
 #ifdef WIN16
@@ -25,7 +25,7 @@
 
 HINSTANCE WB_Instance=0;                // current instance
 HINSTANCE hInst=0;
-HANDLE    WB_Hwnd=0;					// current main
+HWND    WB_Hwnd=0;					// current main
 
 char szAppName[9];              // The name of this application
 char szTitle[40];               // The title bar text
@@ -70,16 +70,16 @@ BOOL InitApplication(HINSTANCE hInstance)
 
     // Load the application name and description strings.
 	WB_Instance=hInstance;
-    LoadString(hInstance, IDS_APPNAME, szAppName, sizeof(szAppName));
+    int testrc=LoadString(hInstance, IDS_APPNAME, szAppName, sizeof(szAppName));
     LoadString(hInstance, IDS_DESCRIPTION, szTitle, sizeof(szTitle));
-
+    char* IconStr=MAKEINTRESOURCE(IDI_APPICON);
     // Fill in window class structure with parameters that describe the
     // main window.
 
     #ifndef WIN16
     wc.cbSize        = sizeof(WNDCLASSEX);
-	wc.hIconSm       = LoadImage(hInstance,		// Load small icon image
-	                             MAKEINTRESOURCE(IDI_APPICON),
+	wc.hIconSm       = (HICON)LoadImage(hInstance,		// Load small icon image
+	                             IconStr,
 	                             IMAGE_ICON,
 	                             16, 16,
 	                             0);
@@ -89,7 +89,7 @@ BOOL InitApplication(HINSTANCE hInstance)
     wc.cbClsExtra    = 0;                       // No per-class extra data.
     wc.cbWndExtra    = 0;                       // No per-window extra data.
     wc.hInstance     = hInstance;               // Owner of this class
-    wc.hIcon         = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_APPICON)); // Icon name from .RC
+    wc.hIcon         = LoadIcon(hInstance, IconStr); // Icon name from .RC
     wc.hCursor       = LoadCursor(NULL, IDC_ARROW); // Cursor
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1); // Default color
     wc.lpszMenuName  = NULL;//szAppName;               // Menu name from .RC
