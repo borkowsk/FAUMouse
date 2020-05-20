@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">Default.Personality</Option>
+			<Option Name="ProjectType"></Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{0B4461A2-A7C7-4E85-B9BE-D20B765D49FE}</Option>
+		</Option>
+	</PersonalityInfo>
+	<Default.Personality>  <Projects>
+      <Projects Name="regmouse.exe">regmouse.bdsproj</Projects>
+      <Projects Name="wbrtmbig.lib">..\..\..\lib\wbrtmbig.bdsproj</Projects>
+      <Projects Name="changeconfig.exe">..\Changeconf\changeconfig.bdsproj</Projects>
+      <Projects Name="Targets">regmouse.exe wbrtmbig.lib changeconfig.exe</Projects>
+    </Projects>
+    <Dependencies>
+      <Dependency GUID="{FD39D3CC-A6B4-48B3-9E0D-0C78109843E8}">
+        <Dependency GUID="{13BA4BBF-47D3-4B90-B8A1-F9A7AC61212E}"/>
+      </Dependency>
+    </Dependencies>
+  </Default.Personality>
+	<StarTeamAssociation></StarTeamAssociation>
+	<StarTeamNonRelativeFiles></StarTeamNonRelativeFiles>
+</BorlandProject>
