@@ -1,0 +1,2 @@
+#	Grupa	Badany	P³eæ	Wiek	Czas
+AZ+LBW	1	11	Kob	50	2013-11-12 14:18:27

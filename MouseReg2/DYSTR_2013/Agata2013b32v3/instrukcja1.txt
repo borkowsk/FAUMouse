@@ -1,0 +1,27 @@
+A123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890X
+B
+C
+D
+E
+Najpierw nagraj swoj¹ wypowiedŸ a potem przeczytaj dalsz¹ czêœæ instrukcji
+F
+G
+H
+I
+J
+To jest przyk³adowa instrukcja dla pierszej czêœci badania:
+L
+1> Pierwsza linia instrukcji
+2> Druga linia instrukcji
+3> Trzecia linia instrukcji
+4> Czwarta linia instrukcji
+R
+Linia koñcz¹ca instrukcjê - naciœnij OK
+T
+U
+W123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890X
+
+
+
+
+.

@@ -1,0 +1,8 @@
+To jest przyk³adowa instrukcja dla DRUGIEJ czêœci badania:
+
+1> Pierwsza linia instrukcji
+2> Druga linia instrukcji
+3> Trzecia linia instrukcji
+4> Czwarta linia instrukcji
+
+Linia koñcz¹ca instrukcjê - naciœnij OK
