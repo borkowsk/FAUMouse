@@ -1,0 +1,3 @@
+[submodule "MouseReg3/fasada-core"]
+	path = MouseReg3/fasada-core
+	url = https://github.com/borkowsk/fasada-core.git
