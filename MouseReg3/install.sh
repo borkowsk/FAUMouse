@@ -15,6 +15,8 @@ echo -e $COLOR1 GIT JOB $NORMCO \
 && cmake . \
 && echo -e $COLOR1 MAKE JOB $NORMCO \
 && make \
+&& echo -e $COLOR1 AVAILABLE IPs $NORMCO \
+&& ifconfig | tee "../IPs.txt" \
 && echo -e $COLOR1 DONE $NORMCO
 popd
 
