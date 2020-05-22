@@ -22,6 +22,6 @@ echo -e $COLOR1 STARTING SERVICE $COLOR2
  && chmod +x stop.sh \
  && echo -e $COLOR1 For close send $COLOR2\
             "http://$MYADDRES:$MYPORT/!!!!"\
-            $COLOR1 from $BROWSER $NORMCO "\n"
+            $COLOR1 from $BROWSER $NORMCO "\n" \
             $COLOR1 Or use $COLOR2 stop.sh $COLOR1 in this directory $NORMCO
 
