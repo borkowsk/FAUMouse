@@ -1,8 +1,9 @@
 #!/bin/bash
+BROWSER=firefox #Select proper LOCAL browser
 MYADDRES=localhost #For debuging only!
 MYPORT=8889
-BROWSER=firefox #Select proper LOCAL browser
 #MYADDRES=192.168.1.100 #Select the proper IP
+#MYPORT=8989
 
 #TERMINAL CONFIG
 if [ ! -e "screen.ini" ]
