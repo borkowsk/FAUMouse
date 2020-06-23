@@ -12,7 +12,7 @@
 //Just answer for READ REQUEST with message
 //set up in previous WRITE REQUEST
 
-#define UNIT_IDENTIFIER "hello"
+#define UNIT_IDENTIFIER "regmouse3"
 
 #include "facebookspec.h"
 #include "fasada.hpp"
@@ -31,7 +31,7 @@ using namespace fasada;
 string MyName("HELLO-");//Process name
 const char* MyMemPoolName=fasada::PRIMARY_EMP;
 
-std::string hello_msg="Hello from fasada demo application!";
+std::string hello_msg="FAU-Mouse version 3.0 experiment registration";
 std::string private_dir="../private/";
 std::string public_dir="../public/";
 
@@ -39,11 +39,11 @@ std::string public_dir="../public/";
 unsigned NumberOfClients=0;
 
 inline URLparser split_request(const string& request)//May throw exceptions
-{                                                    //TODO - move reseult?
+{                                                    //TODO - move results?
     URLparser URL(request.c_str());
     //some extra work
     URL["&public_directory"]=public_dir;
-    if(URL["&domain"]=="localhost")//only localhost serwer has ability to see private directory of fasada
+    if(URL["&domain"]=="localhost")//only localhost server has ability to see private directory of fasada
         URL["&private_directory"]=private_dir;
     return URL;
 }
@@ -269,6 +269,6 @@ int main(int argc, char* argv[])
         return -2;
     }
 
-    return -9999;//Nie powinien tu trafić
+    return -9999;// Should never get here!
 }
 
