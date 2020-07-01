@@ -23,7 +23,7 @@ function sendResults(){ // Placeholder only!!! See https://p5js.org/reference/#/
         let str=(""+lst[0]+"\n"+lst[1]+"\n"+lst[2]+"\n"+lst[3]+"\n"+lst[4]+"\n"+lst[5]+"\n"+
                     lst[6]+"\n"+lst[7]+"\n"+lst[8]+"\n"+lst[9]+"\n"+lst[0xA]+"\n"+lst[0xB]+"\n");
         resultsToSend=false;
-        httpPost("","text",str,OK,problem);//Send data back to server
+        httpPost("/!","text",str,OK,problem);//Send data back to server
         alert(str);
         delay(100);
       }
