@@ -10,11 +10,20 @@ function remember(X,Y,Msg){
     lst.push(time+","+X+","+Y+","+nf(X/width*100,2,2)+"%,"+nf(Y/height*100,2,2)+"%,"+Msg);
 }
 
+function problem(){
+  alert("Huston we have a problem!");
+}
+
+function OK(){
+  alert("Transmission completed!");
+}
+
 function sendResults(){ // Placeholder only!!! See https://p5js.org/reference/#/p5/httpPost 
       if(resultsToSend){
         let str=(""+lst[0]+"\n"+lst[1]+"\n"+lst[2]+"\n"+lst[3]+"\n"+lst[4]+"\n"+lst[5]+"\n"+
                     lst[6]+"\n"+lst[7]+"\n"+lst[8]+"\n"+lst[9]+"\n"+lst[0xA]+"\n"+lst[0xB]+"\n");
         resultsToSend=false;
+        httpPost("","text",str,OK,problem);//Send data back to server
         alert(str);
         delay(100);
       }

@@ -28,7 +28,7 @@
 
 using namespace fasada;
 
-string MyName("HELLO-");//Process name
+string MyName("REGMOUSE3-");//Process name
 const char* MyMemPoolName=fasada::PRIMARY_EMP;
 
 std::string hello_msg="FAU-Mouse version 3.0 experiment registration";
