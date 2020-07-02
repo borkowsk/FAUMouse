@@ -69,8 +69,10 @@ void _do_RorW_request(const string& request,fasada::MemoryPool& MyPool,bool isWr
     URLparser URL=split_request(request);//May throw exceptions
     if(URL.find("&path")!= URL.end())//Sciezka musi byc zawsze
     {
-        //ShmStream outstr(*stringToShare);charallocator? //to jednak nie tak dziala jakbym chcial
-        //outstr << URL["protocol"] << '\n'<< URL["domain"] << '\n'<< URL["path"] << '\n'<< URL["processor"] << '\n'<< URL["query"] << std::endl;
+        //String outstr;//charallocator? //to jednak nie tak dziala jakbym chcial
+        std::cerr << MyName <<" : \n\t"
+               << URL["protocol"] << "\n\t"<< URL["domain"] <<"\n\t"<< URL["path"] << "\n\t"
+               << URL["processor"] <<"\n\t"<< URL["query"] << std::endl;
         for(auto p:URL)
         {
             (*stringToShare)+=p.first.c_str();
@@ -209,7 +211,10 @@ int main(int argc, char* argv[])
     std::cout<<": "<<argc<<" parameters: ";for(int a=0;a<argc;a++) std::cout<<argv[a]<<' ';//DEBUG
     std::cout<<std::endl;
 
-    if( (argc>1 && (string("--force"))!=argv[1]) || (argc>2 &&(string("--force"))!=argv[2] ) )
+    if( argc==1 //Może w ogóle nie być parametrów
+    || (argc==2 && (string("--force"))!=argv[1]) //A jak są to pierwszy może być --force
+    || (argc>2 && (string("--force"))!=argv[2]) //...albo drugi
+            )
     try{
         fasada::MemoryPool TestPool;//Próbuje się podłączyć jako klient
         //Jesli się uda to znaczy że server już działa
