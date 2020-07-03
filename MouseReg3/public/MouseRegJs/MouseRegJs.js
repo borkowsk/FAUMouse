@@ -1,7 +1,16 @@
+//import java.util.UUID;
+ 
 let fs = false; //full screen status
+let drawPoins=true; //DEBUG registered points
 let expState=0; //Experiment phase
 let lst = [];   //Lines
 let resultsToSend=false;
+let unique="";//UUID.randomUUID().toString();- JAVA :-(
+
+function createUUID() 
+{
+  return "uuid-"+(new Date()).getTime().toString(16)+Math.floor(1E7*Math.random()).toString(16);
+}
 
 function remember(X,Y,Msg){
     if(resultsToSend){ return;} // Experiment finished. Data is about to send
@@ -11,20 +20,31 @@ function remember(X,Y,Msg){
 }
 
 function problem(){
-  alert("Huston we have a problem!");
+  alert("Huston! We have a problem!");
 }
 
 function OK(){
   alert("Transmission completed!");
 }
 
-function sendResults(){ // Placeholder only!!! See https://p5js.org/reference/#/p5/httpPost 
+function sendResults(){ // See https://p5js.org/reference/#/p5/httpPost 
       if(resultsToSend){
-        let str=(""+lst[0]+"\n"+lst[1]+"\n"+lst[2]+"\n"+lst[3]+"\n"+lst[4]+"\n"+lst[5]+"\n"+
-                    lst[6]+"\n"+lst[7]+"\n"+lst[8]+"\n"+lst[9]+"\n"+lst[0xA]+"\n"+lst[0xB]+"\n");
-        resultsToSend=false;
-        httpPost("/!","text",str,OK,problem);//Send data back to server
+        unique=createUUID();
+        
+        let str="Wait for sending data!("+unique+")\n";
+        str+=lst[0]+"\n"+lst[1]+"\n"+lst[2]+"\n"+lst[3]+"\n"+lst[4]+"\n"+lst[5]+"\n"+
+             lst[6]+"\n"+lst[7]+"\n"+lst[8]+"\n"+lst[9]+"\n"+lst[0xA]+"\n"+lst[0xB]+"...\n";
+        
+        let data="TESTTESTTESTTEST\n";
+        for(var s of lst)
+        {
+          data+=s+"\n";
+        }
+        
+        httpPost("/!"+unique,"text",data,OK,problem);//Send data back to server
+        
         alert(str);
+        resultsToSend=false;
         delay(100);
       }
 }
@@ -41,7 +61,7 @@ function windowResized() { // Definition of windowResized handler
 
 function mouseMoved(){ // Definition of mouseMoved handler
   if(expState==1){
-    point(mouseX,mouseY);
+    if(drawPoins){ point(mouseX,mouseY);}
     remember(mouseX,mouseY,"MM");
   }
 }
