@@ -1,5 +1,5 @@
 //import java.util.UUID;
- 
+let server_buffer=1024*3;//Expected buffer lenght on server side
 let fs = false; //full screen status
 let drawPoins=true; //DEBUG registered points
 let expState=0; //Experiment phase
@@ -9,7 +9,7 @@ let unique="";//UUID.randomUUID().toString();- JAVA :-(
 
 function createUUID() 
 {
-  return "uuid-"+(new Date()).getTime().toString(16)+Math.floor(1E7*Math.random()).toString(16);
+  return "mouse-"+(new Date()).getTime().toString(16)+Math.floor(1E7*Math.random()).toString(16);
 }
 
 function remember(X,Y,Msg){
@@ -21,6 +21,8 @@ function remember(X,Y,Msg){
 
 function problem(){
   alert("Huston! We have a problem!");
+  resultsToSend=true;//AGAIN!
+  loop();
 }
 
 function OK(){
@@ -28,24 +30,33 @@ function OK(){
 }
 
 function sendResults(){ // See https://p5js.org/reference/#/p5/httpPost 
-      if(resultsToSend){
+      if(resultsToSend)
+      {
+        noLoop();
+        resultsToSend=false;
         unique=createUUID();
+       
+        let str="Wait sometime for sending data!(uuid:"+unique+")\n";
+        //str+=lst[0]+"\n"+lst[1]+"\n"+lst[2]+"\n"+lst[3]+"\n"+lst[4]+"\n"+lst[5]+"\n"+
+        //     lst[6]+"\n"+lst[7]+"\n"+lst[8]+"\n"+lst[9]+"\n"+lst[0xA]+"\n"+lst[0xB]+"...\n";
         
-        let str="Wait for sending data!("+unique+")\n";
-        str+=lst[0]+"\n"+lst[1]+"\n"+lst[2]+"\n"+lst[3]+"\n"+lst[4]+"\n"+lst[5]+"\n"+
-             lst[6]+"\n"+lst[7]+"\n"+lst[8]+"\n"+lst[9]+"\n"+lst[0xA]+"\n"+lst[0xB]+"...\n";
-        
-        let data="TESTTESTTESTTEST\n";
+        let data="#TEST FOR MOUSE EXPERIMENT FINISHED @ "+nf(year(),4)+"-"+nf(month(),2)+"-"+nf(day(),2)+
+                "T"+nf(hour(),2)+'.'+nf(minute(),2)+'.'+nf(second(),2)+'.'+millis()+"\n";
         for(var s of lst)
         {
           data+=s+"\n";
         }
         
-        httpPost("/"+unique+"!","text",data,OK,problem);//Send data back to server
-        
-        alert(str);
-        resultsToSend=false;
-        delay(100);
+        //All in one send. Server buffers may be overloaded!!!
+        if(data.length<server_buffer)//All in one send. Server buffers may be overloaded!!!
+        {
+          httpPost("/"+unique+"!","text",data,OK,problem);//Send data back to server
+          alert(str+"("+data.length+")");
+        }
+        else
+        {
+           alert("BIT DATA NOT IMPLEMENTED YET! ("+data.length+")");  
+        }
       }
 }
 
@@ -125,6 +136,6 @@ function draw(){ // selection from panels
     }
     else {
         draw3();
-        sendResults();//Until success
+        sendResults();//Until success - but this is blocking!
     }
 }
