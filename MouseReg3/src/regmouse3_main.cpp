@@ -63,16 +63,20 @@ void _do_RorW_request(const string& request,fasada::MemoryPool& MyPool,bool isWr
             boost::current_exception_diagnostic_information();
         stringToShare=nullptr;
     }
+
     if(stringToShare==nullptr)
-        throw( interprocess_exception("Server was not able to construct shared memory string!") );
+        throw( interprocess_exception( (MyName+" was not able to construct shared memory string!").c_str()) );
 
     URLparser URL=split_request(request);//May throw exceptions
-    if(URL.find("&path")!= URL.end())//Sciezka musi byc zawsze
+
+    if(URL.find("&path")!= URL.end())//Ściezka musi byc zawsze
     {
         //String outstr;//charallocator? //to jednak nie tak dziala jakbym chcial
-        std::cerr << MyName <<" : \n\t"
-               << URL["protocol"] << "\n\t"<< URL["domain"] <<"\n\t"<< URL["path"] << "\n\t"
-               << URL["processor"] <<"\n\t"<< URL["query"] << std::endl;
+        std::cerr << MyName <<" : recived "<<request<<"\n\t"
+               << URL["&protocol"] <<"->"<< URL["method"] << "\n\t"
+               << URL["&domain"]   <<"\n\t"<< URL["&path"] << "\n\t"
+               << URL["&processor"]<<"\n\t"<< URL["&query"]<< std::endl;
+
         for(auto p:URL)
         {
             (*stringToShare)+=p.first.c_str();

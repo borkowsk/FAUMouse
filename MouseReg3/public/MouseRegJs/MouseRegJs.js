@@ -41,7 +41,7 @@ function sendResults(){ // See https://p5js.org/reference/#/p5/httpPost
           data+=s+"\n";
         }
         
-        httpPost("/!"+unique,"text",data,OK,problem);//Send data back to server
+        httpPost("/"+unique+"!","text",data,OK,problem);//Send data back to server
         
         alert(str);
         resultsToSend=false;

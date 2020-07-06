@@ -34,6 +34,7 @@ include_directories(
 #See: https://gist.github.com/rkitover/3fe24bbf8f3a0e32a19259aca384680a
 
 add_executable( regmouse3
+    "${SRCPATH}../fasada-core/lib/fasada/http/URLparser.cpp"
     "${SRCPATH}/regmouse3_main.cpp"
                 )
 
