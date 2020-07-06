@@ -71,8 +71,7 @@ void _do_RorW_request(const string& request,fasada::MemoryPool& MyPool,bool isWr
 
     if(URL.find("&path")!= URL.end())//Ściezka musi byc zawsze
     {
-        //String outstr;//charallocator? //to jednak nie tak dziala jakbym chcial
-        std::cerr << MyName <<" : recived "<<request<<"\n\t"
+        std::cerr<<"\t"
                << URL["&protocol"] <<"->"<< URL["method"] << "\n\t"
                << URL["&domain"]   <<"\n\t"<< URL["&path"] << "\n\t"
                << URL["&processor"]<<"\n\t"<< URL["&query"]<< std::endl;
@@ -86,20 +85,50 @@ void _do_RorW_request(const string& request,fasada::MemoryPool& MyPool,bool isWr
         }
         ////////////////////////////////////////////////////////////////////
         try{
-            if(!isWriter)
+            if(isWriter)
             {
                 val_string& path=URL["&path"];
-                (*stringToShare)+=ipc::string(EXT_PRE)+"htm\n";
-                (*stringToShare)+="<HTML>\n<H1>"+hello_msg+"</H1>\n</HTML>"+MEM_END;
+
+                if(URL["method"]=="POST")
+                {
+                    if(URL["&processor"][0]=='!')
+                        URL["&processor"]=URL["&processor"].substr(1);
+
+                    //Pierszy slash ścieżki stanowi problem... //TODO CHECK!
+                    //pt::ptree& branch =( path=="/" ? root : root.get_child(pt::ptree::path_type{path.c_str()+1, '/'}) );
+
+                    string bname=POSTED_BLOCK_MARK;
+                    bname+=request;
+                    std::cerr<<"Searching for '"<<bname<<"' ..."<<std::endl;
+                    std::pair<ShmString*, managed_shared_memory::size_type> content = MyPool->find<ShmString>(bname.c_str());
+
+                    if(content.first==nullptr)
+                        throw interprocess_exception("POSTed block not found");
+
+                    if(content.second!=1)
+                        throw interprocess_exception("Strange value returned by MemoryPool::find");//Nie spodziewa się tablicy!
+
+                    std::cout<<bname<<":\n";
+                    for(auto a:*content.first) std::cout<<a;std::cout<<std::endl;//Atrapa kopiowania do pliku
+
+                    MyPool.free_data( bname.c_str() );//Dopóki to się nie wykona, serwer nie dostanie odpowiedzi!
+                    (*stringToShare)+=ipc::string(EXT_PRE)+"htm\n";
+                    (*stringToShare)+="<HTML>\n<H1>DATA '"+URL["&path"]+"' SAVED </H1>\n</HTML>"+MEM_END;
+                }
+                else
+                {
+                    std::cerr<<"Required POST method!"<<std::endl;
+                    (*stringToShare)+=ipc::string(EXT_PRE)+"htm\n";
+                    (*stringToShare)+=ipc::string("<HTML>\n<H1> USE URL in FORM 'http://server:port/uuid!' FOR DATA SAVING</H1>\n</HTML>")+MEM_END;
+                }
             }
             else
             {
-                if(URL["&processor"][0]=='!')
-                    URL["&processor"]=URL["&processor"].substr(1);
-                hello_msg=URL["&processor"];//URL["&path"];
-                //Pierszy slash ścieżki stanowi problem...
-                //pt::ptree& branch =( path=="/" ? root : root.get_child(pt::ptree::path_type{path.c_str()+1, '/'}) );
-                (*stringToShare)+="\n"+hello_msg+"\n"+MEM_END;
+                (*stringToShare)+=ipc::string(EXT_PRE)+"htm\n";
+                (*stringToShare)+="<HTML>\n<H1>"+hello_msg+"</H1>\n";
+                (*stringToShare)+="<P>Required WRITE request using '!' with POST method!</P>";
+                (*stringToShare)+="\n</HTML>\n"+ipc::string(MEM_END);
+                std::cerr<<"Required WRITE request using '!' with POST method!"<<std::endl;
             }
         }
         /////////////////////////////////////////////////////////////////////
@@ -257,7 +286,7 @@ int main(int argc, char* argv[])
             MemoryPool::ContentType msgType;
             try{
                 data=MyMemPool.receive(msgType);//Tu poczeka na pierwszego klienta przynajmniej jakiś czas
-                std::cerr<<MyName<<" received '"<<data<<"'"<<std::endl;
+                std::cerr<<MyName<<" received '"<<data<<"' MSGTTYPE"<<msgType<<std::endl;
                 do_local_processing(data,msgType,MyMemPool);
                 std::this_thread::sleep_for(std::chrono::milliseconds(10));//https://stackoverflow.com/questions/4184468/sleep-for-milliseconds/10613664#10613664?newreg=6841aea0490b47baa3c6a7ea2bebaa30
             }
