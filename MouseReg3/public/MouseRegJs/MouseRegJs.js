@@ -1,16 +1,12 @@
-//import java.util.UUID;
+//Experiment settings
 let server_buffer=1024*1024*2;//Expected buffer lenght on server side. See EXPECTED_HTTP_REQ_BUFFER_SIZE in "fasada_consts.h" !!!
-let fs = false; //full screen status
 let drawPoins=true; //DEBUG registered points
-let expState=0; //Experiment phase
-let lst = [];   //Lines
-let resultsToSend=false;
-let unique="";//UUID.randomUUID().toString();- JAVA :-(
+let frequency=10;//Data registration frequency per second
 
-function createUUID() 
-{
-  return "mouse-"+(new Date()).getTime().toString(16)+Math.floor(1E7*Math.random()).toString(16);
-}
+//Working variables
+let expState=0; //Experiment phase
+let fs = false; //full screen status
+let lst = [];   //Data lines
 
 function remember(X,Y,Msg){
     if(resultsToSend){ return;} // Experiment finished. Data is about to send
@@ -29,33 +25,34 @@ function OK(){
   alert("Transmission completed!");
 }
 
+function createUUID(){
+  return "mouse-"+(new Date()).getTime().toString(16)+Math.floor(1E7*Math.random()).toString(16);
+}
+
+let unique=createUUID();//UUID.randomUUID().toString();- JAVA :-(
+let resultsToSend=false;
+
 function sendResults(){ // See https://p5js.org/reference/#/p5/httpPost 
-      if(resultsToSend)
-      {
+      if(resultsToSend){
         noLoop();
         resultsToSend=false;
-        unique=createUUID();
        
         let str="Wait sometime for sending data!(uuid:"+unique+")\n";
-        //str+=lst[0]+"\n"+lst[1]+"\n"+lst[2]+"\n"+lst[3]+"\n"+lst[4]+"\n"+lst[5]+"\n"+
-        //     lst[6]+"\n"+lst[7]+"\n"+lst[8]+"\n"+lst[9]+"\n"+lst[0xA]+"\n"+lst[0xB]+"...\n";
         
-        let data="#TEST FOR MOUSE EXPERIMENT FINISHED @ "+nf(year(),4)+"-"+nf(month(),2)+"-"+nf(day(),2)+
+        let data="#TEST FOR MOUSE EXPERIMENT. Freq: "+frequency+" FINISHED @ "+nf(year(),4)+"-"+nf(month(),2)+"-"+nf(day(),2)+
                 "T"+nf(hour(),2)+'.'+nf(minute(),2)+'.'+nf(second(),2)+'.'+millis()+"\n";
-        for(var s of lst)
-        {
+        for(var s of lst){
           data+=s+"\n";
         }
         
         //All in one send. Server buffers may be overloaded!!!
-        if(data.length<server_buffer)//All in one send. Server buffers may be overloaded!!!
-        {
+        if(data.length<server_buffer){
+          //All in one send. Server buffers may be overloaded!!!
           httpPost("/"+unique+"!","text",data,OK,problem);//Send data back to server
           alert(str+"("+data.length+")");
         }
-        else
-        {
-           alert("BIT DATA NOT IMPLEMENTED YET! ("+data.length+")");  
+        else{
+           alert("SUCH A BIG DATA NOT IMPLEMENTED YET! ("+data.length+")");  
         }
       }
 }
@@ -63,19 +60,13 @@ function sendResults(){ // See https://p5js.org/reference/#/p5/httpPost
 function setup() {      
    createCanvas(windowWidth, windowHeight);//NOTE: Even full screens may have diferent aspect ratio!!!
    background(128);
+   frameRate(frequency);
 }
 
 function windowResized() { // Definition of windowResized handler 
     resizeCanvas(windowWidth, windowHeight); 
     remember(width,height,"windowResized");
 } 
-
-function mouseMoved(){ // Definition of mouseMoved handler
-  if(expState==1){
-    if(drawPoins){ point(mouseX,mouseY);}
-    remember(mouseX,mouseY,"MM");
-  }
-}
 
 function keyPressed() { // Definition of keyPressed handler
     if(expState==0 && keyCode==ENTER){
@@ -110,9 +101,11 @@ function draw2() { // Experiment panel
   //line(width,0,0,height);
   stroke(0,255,255);
   //line(0,0,width,height);
-  fill(0,0,255);
+  fill(0,0,random(255));
   ellipse(width/2,height/2,height/10,height/10);
   stroke(0);
+  if(drawPoins){ point(mouseX,mouseY);}
+    remember(mouseX,mouseY,"MM");
 }
 
 function draw3() { // Final panel
@@ -139,3 +132,12 @@ function draw(){ // selection from panels
         sendResults();//Until success - but this is blocking!
     }
 }
+
+/*
+function mouseMoved(){ // Definition of mouseMoved handler writing when mouse moved
+  if(expState==1){
+    if(drawPoins){ point(mouseX,mouseY);}
+    remember(mouseX,mouseY,"MM");
+  }
+}
+*/

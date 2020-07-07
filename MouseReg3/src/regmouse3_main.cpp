@@ -24,6 +24,7 @@
 #include <boost/algorithm/string/case_conv.hpp>
 
 #include <iostream>
+#include <fstream>
 #include <time.h>       /* time_t, struct tm, time, localtime */
 
 using namespace fasada;
@@ -108,18 +109,27 @@ void _do_RorW_request(const string& request,fasada::MemoryPool& MyPool,bool isWr
                     if(content.second!=1)
                         throw interprocess_exception("Strange value returned by MemoryPool::find");//Nie spodziewa się tablicy!
 
-                    std::cout<<bname<<":\n";
-                    for(auto a:*content.first) std::cout<<a;std::cout<<std::endl;//Atrapa kopiowania do pliku
+                    //Saving the data: https://stackoverflow.com/questions/11563963/how-to-write-a-large-buffer-into-a-binary-file-in-c-fast
+                    std::string fname="."+path+".txt";
+                    std::cout<<"'"<<bname<<"' will be saved as '"<<fname<<"'\n";
+                    //for(auto a:*content.first) std::cout<<a;std::cout<<std::endl;//Atrapa powolnego kopiowania do pliku
+                    std::ios_base::sync_with_stdio(false);
+                    auto dataLen=content.first->size();
+                    auto myfile = std::fstream(fname, std::ios::out | std::ios::binary);//.c_str()?
+                    myfile.write((char*)&(*content.first)[0],dataLen);//To BLOKUJE i może poptrwać!
+                    myfile.close();
+                    std::ios_base::sync_with_stdio(true);
 
-                    MyPool.free_data( bname.c_str() );//Dopóki to się nie wykona, serwer nie dostanie odpowiedzi!
+                    MyPool.free_data( bname.c_str() );//Blokujące - dopóki to się nie wykona, serwer nie dostanie odpowiedzi!
+                    std::cout<<bname<<" saved.\n";
                     (*stringToShare)+=ipc::string(EXT_PRE)+"htm\n";
-                    (*stringToShare)+="<HTML>\n<H1>DATA '"+URL["&path"]+"' SAVED </H1>\n</HTML>"+MEM_END;
+                    (*stringToShare)+="<HTML>\n<H1>DATA '"+fname+"' SAVED </H1>\n</HTML>"+MEM_END;
                 }
                 else
                 {
                     std::cerr<<"Required POST method!"<<std::endl;
                     (*stringToShare)+=ipc::string(EXT_PRE)+"htm\n";
-                    (*stringToShare)+=ipc::string("<HTML>\n<H1> USE URL in FORM 'http://server:port/uuid!' FOR DATA SAVING</H1>\n</HTML>")+MEM_END;
+                    (*stringToShare)+=ipc::string("<HTML>\n<H1>For saving data POST with URL in form as follow:<i>'http://server:port/uuid!'</i></H1>\n</HTML>")+MEM_END;
                 }
             }
             else
