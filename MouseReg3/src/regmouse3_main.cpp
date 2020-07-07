@@ -32,7 +32,7 @@ using namespace fasada;
 string MyName("REGMOUSE3-");//Process name
 const char* MyMemPoolName=fasada::PRIMARY_EMP;
 
-std::string hello_msg="FAU-Mouse version 3.0 experiment registration";
+std::string hello_msg="FAU-Mouse version 3.0 experiment registration COMPILATION:" __TIME__;
 std::string private_dir="../private/";
 std::string public_dir="../public/";
 
@@ -121,7 +121,7 @@ void _do_RorW_request(const string& request,fasada::MemoryPool& MyPool,bool isWr
                     std::ios_base::sync_with_stdio(true);
 
                     MyPool.free_data( bname.c_str() );//Blokujące - dopóki to się nie wykona, serwer nie dostanie odpowiedzi!
-                    std::cout<<bname<<" saved.\n";
+                    std::cout<<"'"<<bname<<"' saved.\n";
                     (*stringToShare)+=ipc::string(EXT_PRE)+"htm\n";
                     (*stringToShare)+="<HTML>\n<H1>DATA '"+fname+"' SAVED </H1>\n</HTML>"+MEM_END;
                 }
@@ -129,7 +129,7 @@ void _do_RorW_request(const string& request,fasada::MemoryPool& MyPool,bool isWr
                 {
                     std::cerr<<"Required POST method!"<<std::endl;
                     (*stringToShare)+=ipc::string(EXT_PRE)+"htm\n";
-                    (*stringToShare)+=ipc::string("<HTML>\n<H1>For saving data POST with URL in form as follow:<i>'http://server:port/uuid!'</i></H1>\n</HTML>")+MEM_END;
+                    (*stringToShare)+=ipc::string("<HTML>\n<H1>For saving data POST with URL in form as follow:<br><i>'http://server:port/uuid!'</i></H1>\n</HTML>")+MEM_END;
                 }
             }
             else
