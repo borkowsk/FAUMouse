@@ -1,5 +1,5 @@
 //import java.util.UUID;
-let server_buffer=1024*3;//Expected buffer lenght on server side
+let server_buffer=1024*1024*2;//Expected buffer lenght on server side. See EXPECTED_HTTP_REQ_BUFFER_SIZE in "fasada_consts.h" !!!
 let fs = false; //full screen status
 let drawPoins=true; //DEBUG registered points
 let expState=0; //Experiment phase
