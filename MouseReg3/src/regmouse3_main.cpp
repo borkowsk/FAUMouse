@@ -118,26 +118,26 @@ void _do_RorW_request(const string& request,fasada::MemoryPool& MyPool,bool isWr
 
                     std::cout<<dataLen<<" BYTES of '"<<bname<<"' will be saved as '"<<fname<<"'\n";
                     if(dataLen==0)
-                        throw interprocess_exception("empty POSTed block!!!");//Pusty blok zostaje do debugingu!
+                        throw interprocess_exception("POSTed block is EMPTY!!! \nTry to use other browser.");//Pusty blok zostaje do debugingu!
 
                     //for(auto a:*content.first) std::cout<<a;std::cout<<std::endl;//Atrapa powolnego kopiowania do pliku
 
                     std::ios_base::sync_with_stdio(false);
                     auto myfile = std::fstream(fname, std::ios::out | std::ios::binary);//.c_str()?
-                    myfile.write((char*)&(*content.first)[0],dataLen);//To BLOKUJE i może poptrwać!
+                    myfile.write((char*)&(*content.first)[0],dataLen);//To BLOKUJE i może potrwać!
                     myfile.close();
                     std::ios_base::sync_with_stdio(true);
 
                     MyPool.free_data( bname.c_str() );//Blokujące - dopóki to się nie wykona, serwer nie dostanie odpowiedzi!
                     std::cout<<"'"<<bname<<"' saved.\n";
                     (*stringToShare)+=ipc::string(EXT_PRE)+"htm\n";
-                    (*stringToShare)+="<HTML>\n<H1>DATA '"+fname+"' SAVED </H1>\n</HTML>"+MEM_END;
+                    (*stringToShare)+="<HTML><H1>\n\nDATA '"+fname+"' SAVED \n\n</H1></HTML>"+MEM_END;
                 }
                 else
                 {
                     std::cerr<<"Required POST method!"<<std::endl;
                     (*stringToShare)+=ipc::string(EXT_PRE)+"htm\n";
-                    (*stringToShare)+=ipc::string("<HTML>\n<H1>For saving data POST with URL in form as follow:<br><i>'http://server:port/uuid!'</i></H1>\n</HTML>")+MEM_END;
+                    (*stringToShare)+=ipc::string("<HTML><H1>\n\nFor saving data POST with URL in form as follow:\n<br><i>\n'http://server:port/uuid!'\n\n</i></H1></HTML>")+MEM_END;
                 }
             }
             else
@@ -155,10 +155,16 @@ void _do_RorW_request(const string& request,fasada::MemoryPool& MyPool,bool isWr
             *stringToShare+=exc.what();
             *stringToShare+=MEM_END;
         }
+        catch(interprocess_exception& exc)
+        {
+            *stringToShare+=exc.what();
+            *stringToShare+=MEM_END;
+        }
         catch(...)
         {
-             *stringToShare+=("UNEXPECTED ERROR @" + boost::lexical_cast<std::string>( __LINE__ )
-                              +MEM_END);
+             *stringToShare+=(std::string(__FILE__) + "UNEXPECTED ERROR @"
+                              + boost::lexical_cast<std::string>( __LINE__ )
+                              + MEM_END);
         }
     }
     else

@@ -15,14 +15,21 @@ function remember(X,Y,Msg){
     lst.push(time+","+X+","+Y+","+nf(X/width*100,2,2)+"%,"+nf(Y/height*100,2,2)+"%,"+Msg);
 }
 
-function problem(){
-  alert("Huston! We have a problem!");
+function problem(response){
+  var message="Huston! We have a problem!\n";
+  message+=response;
+  //console.log(response); //NOTHING APPEARS
+  //for(var s of response) //ERROR?
+  //{ message+=s; message+="\n";}
+  alert(message);
   resultsToSend=true;//AGAIN!
   loop();
 }
 
-function OK(){
-  alert("Transmission completed!");
+function OK(response){
+  var message="Transmission done! See answer:\n";
+  message+=response;
+  alert(message);
 }
 
 function createUUID(){
@@ -31,8 +38,8 @@ function createUUID(){
 
 let resultsToSend=false;
 
-function sendResults(){ // See https://p5js.org/reference/#/p5/httpPost 
-      let unique=createUUID();//UUID.randomUUID().toString();- JAVA :-(
+function sendResults(){ // See https://p5js.org/reference/#/p5/httpPost , https://www.geeksforgeeks.org/p5-js-httppost-function/ 
+      let unique=createUUID();
       if(resultsToSend){
         noLoop();
         resultsToSend=false;
@@ -107,7 +114,8 @@ function draw2() { // Experiment panel
   ellipse(width/2,height/2,height/10,height/10);
   stroke(0);
   if(drawPoins){ point(mouseX,mouseY);}
-    remember(mouseX,mouseY,"MM");
+  //This is writing "frequency" times per every second.
+  remember(mouseX,mouseY,"MM");
 }
 
 function draw3() { // Final panel
@@ -136,7 +144,7 @@ function draw(){ // selection from panels
 }
 
 /*
-function mouseMoved(){ // Definition of mouseMoved handler writing when mouse moved
+function mouseMoved(){ // Definition of mouseMoved handler. This is writing when mouse moved!
   if(expState==1){
     if(drawPoins){ point(mouseX,mouseY);}
     remember(mouseX,mouseY,"MM");
