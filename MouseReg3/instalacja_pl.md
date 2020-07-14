@@ -1,8 +1,8 @@
 **FAUMouse3 jest pakietem do rejestracji ruchu myszy na ekranie za pośrednictwem WWW.**
 
 Narzędzie składa się z części serwerowej i części przeglądarkowej:
-- Po stronie serwera działają dwa programy napisane w C++ - wwwserver i mousereg3 
-- Po stronie klienta działa program w jezyku JavaScript z nakładką w postaci biblioteki P5.min.js z Processingu
+- Po stronie serwera działają dwa programy napisane w C++ - *wwwserver* i *mousereg3* 
+- Po stronie klienta działa program w jezyku JavaScript z nakładką w postaci biblioteki *P5.min.js* z Processingu
 
 Do uruchomienia niezbędne są następujące pakiety:
 - GIT (opcjonalnie)
@@ -26,20 +26,21 @@ sudo apt-get install g++
 
 Katalog zawiera:
 
-- instalacja_pl.md - ten plik
-- inslalation_en.md - angielska wersja tego pliku
-- install.sh - skrypt bash służący do kompilacji i przygotowania aplikacji do działania
-- start.sh - skrypt bash uruchamiający skompilowaną aplikację i serwer www 
-- stop.sh - skrypt służący do zamknięcia serwisu
-- IPs.txt - wynik sprawdzenie środowiska sieciowego (za pomocą *ifconfig*)
-- screen.ini - używana w skryptach konfiguracja kolorów na terminalu
-- service.log - wyniki działania aplikacji mousereg3 z poprzedniego lub trwającego uruchomienia
-- src/regmouse3_main.cpp - kod źródłowy aplikacji serwisu
-- src/regmouse3 - aplikacja serwisu, jeśli kompilacja przebiegła poprawnie
-- private/ - katalog na zebrane dane
-- public/ - katalog którego zawartość jest widoczna poprzez serwer WWW. Kluczowy jest plik index.html, ktory należy edytować wg. potrzeb. Na wszelki wypadek istnieje jego kopia o nazwie index_demo.html
+- instalacja_pl.md - _ten plik_
+- inslalation_en.md - _angielska wersja tego pliku_
+- install.sh - _skrypt bash służący do kompilacji i przygotowania aplikacji do działania_
+- start.sh - _skrypt bash uruchamiający skompilowaną aplikację i serwer www_ 
+- stop.sh - _skrypt służący do zamknięcia serwisu, tworzony za każdym razem od nowa przez skrypt_ start.sh
+- IPs.txt - _wynik sprawdzenie środowiska sieciowego_ (za pomocą_ *ifconfig* )
+- screen.ini - _używana w skryptach konfiguracja kolorów na terminalu_
+- service.log - _wyniki działania aplikacji mousereg3 z poprzedniego lub trwającego uruchomienia_
+- src/regmouse3_main.cpp - _kod źródłowy aplikacji serwisu_
+- src/regmouse3 - _aplikacja serwisu, jeśli kompilacja przebiegła poprawnie_
+- private/ - _katalog na zebrane dane_
+- public/ - _katalog którego zawartość jest widoczna poprzez serwer WWW_ . Kluczowy jest plik *index.html*, ktory należy edytować wg. potrzeb. Na wszelki wypadek istnieje jego kopia o nazwie *index_demo.html*
 - public/MouseRegJs/ - katalog z rejestratorem i biblioteką P5 . Może zawierać też inne pliki wygenerowane przez Processing
 - public/MouseRegJs/MouseRegJs.js - rejestrator działający w przeglądarce.
+- fasada_core/ - importowany katalog z serwerem WWW i bibliotekami komunikacji między serwerem a korzystającymi z niego serwisami
 
 Sposób działania:
 
@@ -53,7 +54,7 @@ Jeśli dojdzie do końca to wyświetli adresy IP które mogą zostać użyte
 
 ./start.sh
 
-Uruhomi się serwis w wersji lokalnej. Powinno pojawić się okno przeglądarki ze stroną z katalogu ./public/ , która zawiera link do aplikacji rejestrującej. Jeśli rejestracja zadziała to w katalogu ./private/ powinien pojawić się plik mouse*.raw 
+Uruchomi się serwis w wersji lokalnej. Powinno pojawić się okno przeglądarki ze stroną z katalogu ./public/ , która zawiera link do aplikacji rejestrującej. Jeśli rejestracja zadziała to w katalogu ./private/ powinien pojawić się plik mouse*.raw 
 
 3) Uruchomić 
 
