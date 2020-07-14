@@ -100,8 +100,11 @@ void _do_RorW_request(const string& request,fasada::MemoryPool& MyPool,bool isWr
 
                     string bname=POSTED_BLOCK_MARK;
                     bname+=request;
-                    std::cerr<<"Searching for '"<<bname<<"' ..."<<std::endl;
-                    std::pair<ShmString*, managed_shared_memory::size_type> content = MyPool->find<ShmString>(bname.c_str());
+                    std::cerr<<"Searching for '"<<bname<<"' ... ";
+
+                    std::pair<ShmString*, managed_shared_memory::size_type> content = MyPool->find<ShmString>( bname.c_str() );
+
+                    std::cerr<<"FINE"<<std::endl;//Finished
 
                     if(content.first==nullptr)
                         throw interprocess_exception("POSTed block not found");
@@ -110,11 +113,16 @@ void _do_RorW_request(const string& request,fasada::MemoryPool& MyPool,bool isWr
                         throw interprocess_exception("Strange value returned by MemoryPool::find");//Nie spodziewa się tablicy!
 
                     //Saving the data: https://stackoverflow.com/questions/11563963/how-to-write-a-large-buffer-into-a-binary-file-in-c-fast
-                    std::string fname="."+path+".txt";
-                    std::cout<<"'"<<bname<<"' will be saved as '"<<fname<<"'\n";
-                    //for(auto a:*content.first) std::cout<<a;std::cout<<std::endl;//Atrapa powolnego kopiowania do pliku
-                    std::ios_base::sync_with_stdio(false);
+                    std::string fname="./private"+path+".raw";
                     auto dataLen=content.first->size();
+
+                    std::cout<<dataLen<<" BYTES of '"<<bname<<"' will be saved as '"<<fname<<"'\n";
+                    if(dataLen==0)
+                        throw interprocess_exception("empty POSTed block!!!");//Pusty blok zostaje do debugingu!
+
+                    //for(auto a:*content.first) std::cout<<a;std::cout<<std::endl;//Atrapa powolnego kopiowania do pliku
+
+                    std::ios_base::sync_with_stdio(false);
                     auto myfile = std::fstream(fname, std::ios::out | std::ios::binary);//.c_str()?
                     myfile.write((char*)&(*content.first)[0],dataLen);//To BLOKUJE i może poptrwać!
                     myfile.close();

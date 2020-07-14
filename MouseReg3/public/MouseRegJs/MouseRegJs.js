@@ -29,10 +29,10 @@ function createUUID(){
   return "mouse-"+(new Date()).getTime().toString(16)+Math.floor(1E7*Math.random()).toString(16);
 }
 
-let unique=createUUID();//UUID.randomUUID().toString();- JAVA :-(
 let resultsToSend=false;
 
 function sendResults(){ // See https://p5js.org/reference/#/p5/httpPost 
+      let unique=createUUID();//UUID.randomUUID().toString();- JAVA :-(
       if(resultsToSend){
         noLoop();
         resultsToSend=false;
@@ -41,12 +41,14 @@ function sendResults(){ // See https://p5js.org/reference/#/p5/httpPost
         
         let data="#TEST FOR MOUSE EXPERIMENT. Freq: "+frequency+" FINISHED @ "+nf(year(),4)+"-"+nf(month(),2)+"-"+nf(day(),2)+
                 "T"+nf(hour(),2)+'.'+nf(minute(),2)+'.'+nf(second(),2)+'.'+millis()+"\n";
+                
         for(var s of lst){
           data+=s+"\n";
         }
         
         //All in one send. Server buffers may be overloaded!!!
-        if(data.length<server_buffer){
+        
+        if(data.length>0 && data.length<server_buffer){
           //All in one send. Server buffers may be overloaded!!!
           httpPost("/"+unique+"!","text",data,OK,problem);//Send data back to server
           alert(str+"("+data.length+")");

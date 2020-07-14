@@ -1,5 +1,5 @@
 #!/bin/bash
-FAUMOUSEVERSION="3 (2020)"
+FAUMOUSEVERSION="3 (2020.07.14)"
 
 #TERMINAL CONFIG
 if [ ! -e "screen.ini" ]
