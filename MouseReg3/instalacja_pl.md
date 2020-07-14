@@ -10,6 +10,7 @@ Do uruchomienia niezbędne są następujące pakiety:
 - g++ (raczej jest na każdym linuxie)
 - cmake
 - biblioteka boost
+- biblioteka magic (wymagana przez fasada-core, choć nie używana w tym projekcie)
 - Processing do edycji i testowania zmian w skrypcie zbierającym dane (opcjonalnie)
 
 *Na UBUNTU ich instalacja wygląda następująco:*
@@ -17,6 +18,7 @@ Do uruchomienia niezbędne są następujące pakiety:
 sudo apt-get install git
 sudo apt-get install cmake
 sudo apt-get install libboost-all-dev
+sudo apt-get install libmagic-dev
 
 *i ewentualnie make i g++*
 
