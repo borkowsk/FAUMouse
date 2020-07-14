@@ -1,5 +1,6 @@
 #!/bin/bash
 FAUMOUSEVERSION="3 (2020.07.14)"
+WITHGIT=false #true
 
 #TERMINAL CONFIG
 if [ ! -e "screen.ini" ]
@@ -9,6 +10,8 @@ fi
 source "screen.ini"
 
 #REAL JOB
+if($WITHGIT)
+then
 echo -e $COLOR2 GIT $COLOR1 FOR FAU-MOUSE  $NORMCO \
 && git checkout master \
 && git pull \
@@ -17,7 +20,12 @@ echo -e $COLOR2 GIT $COLOR1 FOR FAU-MOUSE  $NORMCO \
 && echo -e $COLOR2 GIT $COLOR1 FOR FASADA  $NORMCO \
 && git checkout master \
 && git pull \
-&& echo -e $COLOR2 CMAKE $COLOR1 FOR FASADA $COLOR2 \
+&& popd \
+&& echo -e $NORMCO
+fi
+
+echo -e $COLOR2 CMAKE $COLOR1 FOR FASADA $COLOR2 \
+&& pushd fasada-core \
 && cmake . \
 && echo -e $COLOR2 MAKE $COLOR1 FOR FASADA $NORMCO \
 && make \
@@ -26,7 +34,7 @@ echo -e $COLOR2 GIT $COLOR1 FOR FAU-MOUSE  $NORMCO \
 && pushd src \
 && echo -e $COLOR2 CMAKE $COLOR1 FOR FAU-MOUSE version $FAUMOUSEVERSION $COLOR2 \
 && cmake . \
-&& echo -e $COLOR2 MAKE $COLOR1 FOR FAU-MOUSE version $FAUMOUSEVERSION $COLOR2 \
+&& echo -e $COLOR2 MAKE $COLOR1 FOR FAU-MOUSE version $FAUMOUSEVERSION $NORMCO \
 && make \
 && echo -e $COLOR1 \
 && popd \

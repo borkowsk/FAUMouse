@@ -9,7 +9,7 @@ if [ $# -eq 2 ]
 then
  #echo "2 arguments supplied"
  MYADDRES="$1"
- MYPORT="$2"    
+ MYPORT="$2"
 fi
 
 #TERMINAL CONFIG
