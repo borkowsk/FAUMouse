@@ -21,7 +21,7 @@ source "screen.ini"
 
 #REAL JOB
 echo -e $COLOR1 STARTING SERVICE $COLOR2
-(./src/regmouse3 > service.log 2>&1 &)\
+(./src/regmouse3 $3 > service.log 2>&1 &)\
  && (sleep 1 )\
  && (./fasada-core/wwwserver  $MYADDRES $MYPORT ./public/ &)\
  && (sleep 1 )\
@@ -32,4 +32,8 @@ echo -e $COLOR1 STARTING SERVICE $COLOR2
             "http://$MYADDRES:$MYPORT/!!!!"\
             $COLOR1 from $BROWSER $NORMCO "\n" \
             $COLOR1 Or use $COLOR2 stop.sh $COLOR1 in this directory $NORMCO
+
+#OPTIONAL WINDOW FOR SERVICE.LOG
+xterm -T service.log -e tail -f service.log &
+
 
