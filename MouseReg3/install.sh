@@ -7,7 +7,19 @@ if [ ! -e "screen.ini" ]
 then
   cp  "fasada-core/lib/fasada/_config_template/screen.ini" ./
 fi
-source "screen.ini"
+
+if [ -e "screen.ini" ]
+then
+  source "screen.ini"
+fi
+
+#GIT CONFIG
+if [ -z "$1" ]
+then
+  echo -e $COLOR2 "Default git usage is"$COLOR1 $WITHGIT $NORMCO
+else
+  WITHGIT=$1
+fi
 
 #REAL JOB
 if($WITHGIT)

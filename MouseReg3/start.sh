@@ -1,7 +1,7 @@
 #!/bin/bash
-BROWSER=firefox #Select proper LOCAL browser
+BROWSER=firefox #Select proper LOCAL browser, NOT Chrome!!!
 MYADDRES=localhost #For debbuging only!
-MYPORT=8889
+MYPORT=8889     #Select the proper PORT for testing, when 8889 is not available
 #MYADDRES=192.168.1.100 #Select the IP proper for testing
 #MYPORT=8989    #Select the proper PORT for testing, when 8989 is not available
 
