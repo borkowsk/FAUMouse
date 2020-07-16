@@ -16,14 +16,19 @@ Do uruchomienia niezbędne są następujące pakiety:
 *Na UBUNTU ich instalacja wygląda następująco:*
 
 sudo apt-get install git
+
 sudo apt-get install cmake
+
 sudo apt-get install libboost-all-dev
+
 sudo apt-get install libmagic-dev
 
 *i ewentualnie make i g++*
 
 sudo apt-get update
+
 sudo apt-get install build-essential
+
 sudo apt-get install g++
 
 Katalog zawiera:
