@@ -75,5 +75,5 @@ Serwis lokalny zostanie zamknięty, a w oknie przeglądarki pojawi się informac
 
 Jesli dane IP bedzie dostępne globalnie serwis powinien działać przynajmniej na przeglądarce Firefox.
 
-**Aktualnie przetestowano poprawne działanie serwisu na platformie UBUNTU 18.04 i klienta w sieci lokalnej na przeglądarce Firefox w systemie UBUNTU 18.04 i klienta na Windows. Wykryto niepoprawne działanie na przeglądarce Chrome, która wydaje się nie przesyłać danych, a jedynie ich nagłówek**
+**Aktualnie przetestowano poprawne działanie serwisu na platformie UBUNTU 16.04 i 18.04 i klienta w sieci lokalnej na przeglądarce Firefox w systemie UBUNTU i klienta na Windows. Wykryto niepoprawne działanie na przeglądarce Chrome, która wydaje się nie przesyłać danych, a jedynie ich nagłówek**
 
