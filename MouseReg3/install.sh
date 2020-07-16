@@ -1,6 +1,6 @@
 #!/bin/bash
 FAUMOUSEVERSION="3 (2020.07.14)"
-WITHGIT=false #true
+WITHGIT=false #false/true
 
 #TERMINAL CONFIG
 if [ ! -e "screen.ini" ]
