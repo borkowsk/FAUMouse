@@ -1,4 +1,4 @@
-**FAUMouse3 jest pakietem do rejestracji ruchu myszy na ekranie za pośrednictwem WWW**
+**FAUMouse3 is a package for recording mouse movement on the screen via the web**
 
 The tool consists of a server part and a browser part:
 - On the server side there are two programs written in C++ - *wwwserver* and *mousereg3*
@@ -74,7 +74,7 @@ The local service will be closed and the information about it's unavailability w
 
 ./start.sh  192.168.1.104 8888
 
-If the selected IP will be available globally, the service should work globally, at least in Firefox.
+If the selected IP will be available globally, the service should work globally, at least in `Firefox`.
 
-**Currently, the correct operation of the dedicated website has been tested on the UBUNTU 16.04 and 18.04 platform and the client in the local network on the `Firefox` browser in the UBUNTU system and the client on Windows. An invalid activity has been detected on `Chrome` that does not seem to transmit data, only the header**
+**Currently, the correct operation of the dedicated website has been tested on the `UBUNTU 16.04` and `18.04` platform and the client in the local network on the `Firefox` browser in the `UBUNTU` system and the client on `Windows`. An invalid activity has been detected on `Chrome` that does not seem to transmit data, only the header**
 

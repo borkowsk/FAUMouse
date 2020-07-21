@@ -61,7 +61,7 @@ Jeśli dojdzie do końca to wyświetli adresy IP, które mogą zostać użyte
 
 ./start.sh
 
-Uruchomi się serwis w wersji lokalnej. Powinno pojawić się okno przeglądarki ze stroną z katalogu ./public/ , która zawiera link do aplikacji rejestrującej. Jeśli rejestracja zadziała to w katalogu ./private/ powinien pojawić się jakiś plik `mouse*.raw` 
+Uruchomi się serwis w wersji lokalnej. Powinno pojawić się okno przeglądarki ze stroną z katalogu `./public/` , która zawiera link do aplikacji rejestrującej. Jeśli rejestracja zadziała to w katalogu `./private/` powinien pojawić się jakiś plik `mouse*.raw` 
 
 3) Uruchomić 
 
@@ -73,7 +73,7 @@ Serwis lokalny zostanie zamknięty, a w oknie przeglądarki pojawi się odpowied
 
 ./start.sh  192.168.1.104 8888
 
-Jeśli wybrane IP będzie dostępne globalnie lub mapowane to serwis powinien działać przynajmniej na przeglądarce Firefox.
+Jeśli wybrane IP będzie dostępne globalnie lub mapowane to serwis powinien działać przynajmniej na przeglądarce `Firefox`.
 
-**Aktualnie przetestowano poprawne działanie serwisu na platformie UBUNTU 16.04 i 18.04 i klienta w sieci lokalnej na przeglądarce Firefox w systemie UBUNTU oraz klienta na Windows. Wykryto niepoprawne działanie na przeglądarce Chrome, która wydaje się nie przesyłać danych, a jedynie ich nagłówek**
+**Aktualnie przetestowano poprawne działanie serwisu na platformie `UBUNTU 16.04` i `18.04` i klienta w sieci lokalnej na przeglądarce `Firefox` w systemie UBUNTU oraz klienta na `Windows`. Wykryto niepoprawne działanie na przeglądarce `Chrome`, która wydaje się nie przesyłać danych, a jedynie ich nagłówek**
 
