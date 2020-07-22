@@ -3,7 +3,7 @@
 # @author Wojciech Borkowski <wborkowsk@gmail.com>
 # @footnote Technical mail: <wborkowski@uw.edu.pl>
 # @copyright 2020
-# @version 0.01
+# @version 0.03
 #
 #  See CURRENT licence file!
 #
@@ -43,11 +43,18 @@ if(NOT DEFINED DISTRIB_ID )
 endif(NOT DEFINED DISTRIB_ID)
 
 if(NOT DEFINED DISTRIB_RELEASE )
-    set(DISTRIB_RELEASE 0.01 )
+    set(DISTRIB_RELEASE 0.03 )
 endif(NOT DEFINED DISTRIB_RELEASE)
 
-add_definitions( "-DDISTRIB_ID=${DISTRIB_ID}"  "-DDISTRIB_RELEASE=${DISTRIB_RELEASE}" )
-target_compile_options( regmouse3      PRIVATE "-L\"${SRCPATH}/../fasada-core/\"" "${CMAKE_CXX_FLAGS}" "-std=c++11" )
+add_definitions( "-DFAUMOUSEVERSION=\"${FAUMOUSEVERSION}\"" 
+                 "-DDISTRIB_ID=${DISTRIB_ID}"  
+                 "-DDISTRIB_RELEASE=${DISTRIB_RELEASE}" 
+                )
+
+target_compile_options( regmouse3      
+                        PRIVATE "-L\"${SRCPATH}/../fasada-core/\"" 
+                        "${CMAKE_CXX_FLAGS}" "-std=c++11" 
+                )
 
 target_link_libraries(regmouse3  LINK_PUBLIC
     fasada

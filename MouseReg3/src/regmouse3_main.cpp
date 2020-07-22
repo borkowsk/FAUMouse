@@ -2,8 +2,8 @@
 /// ---------------------------------------------------
 /// @author Wojciech Borkowski <wborkowsk@gmail.com>
 /// @footnote Technical mail: <fasada.wb@gmail.com>
-/// @copyright 2019
-/// @version 0.01
+/// @copyright 2020
+/// @version 0.03
 ///
 ///  See CURRENT licence file!
 ///
@@ -32,7 +32,11 @@ using namespace fasada;
 string MyName("REGMOUSE3-");//Process name
 const char* MyMemPoolName=fasada::PRIMARY_EMP;
 
-std::string hello_msg="FAU-Mouse version 3.0 experiment registration COMPILATION:" __TIME__;
+std::string hello_msg="FAU-Mouse version " FAUMOUSEVERSION 
+                      " experiment registration service." 
+                      " COMPILATION: " __DATE__ " " __TIME__ 
+                      ;
+
 std::string private_dir="../private/";
 std::string public_dir="../public/";
 
@@ -49,7 +53,8 @@ inline URLparser split_request(const string& request)//May throw exceptions
     return URL;
 }
 
-void _do_RorW_request(const string& request,fasada::MemoryPool& MyPool,bool isWriter)//May throw exceptions
+void _do_RorW_request(const string& request,fasada::MemoryPool& MyPool,bool isWriter)
+//May throw exceptions!
 {
     ShmCharAllocator charallocator(MyPool->get_segment_manager());
     ShmString *stringToShare = nullptr;
@@ -263,8 +268,9 @@ void do_local_processing(string& request, MemoryPool::ContentType msgType,fasada
 
 int main(int argc, char* argv[])
 {
+    std::cout<<"\n"<<hello_msg;
     MyName+=boost::lexical_cast<string>(getpid());
-    std::cout<<"\n"<<MyName;
+    std::cout<<"\nInstance:\n\t"<<MyName;
     std::cout<<": "<<argc<<" parameters: ";for(int a=0;a<argc;a++) std::cout<<argv[a]<<' ';//DEBUG
     std::cout<<std::endl;
 

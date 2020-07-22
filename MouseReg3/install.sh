@@ -1,5 +1,14 @@
 #!/bin/bash
-FAUMOUSEVERSION="3 (2020.07.14)"
+# This file is a part of MouseReg3
+# ---------------------------------------------------
+FAUMOUSEVERSION="3 (2020.07.22)"
+#
+# @author Wojciech Borkowski <wborkowsk@gmail.com>
+# @footnote Technical mail: <wborkowski@uw.edu.pl>
+#
+#  See CURRENT licence file!
+#
+
 WITHGIT=false #false/true
 
 #TERMINAL CONFIG
@@ -44,8 +53,8 @@ echo -e $COLOR2 CMAKE $COLOR1 FOR FASADA $COLOR2 \
 && echo -e $COLOR1 \
 && popd \
 && pushd src \
-&& echo -e $COLOR2 CMAKE $COLOR1 FOR FAU-MOUSE version $FAUMOUSEVERSION $COLOR2 \
-&& cmake . \
+&& echo -e $COLOR2 CMAKE $COLOR1 FOR FAU-MOUSE version "'$FAUMOUSEVERSION'" $COLOR2 \
+&& cmake -D FAUMOUSEVERSION="'$FAUMOUSEVERSION'"  . \
 && echo -e $COLOR2 MAKE $COLOR1 FOR FAU-MOUSE version $FAUMOUSEVERSION $NORMCO \
 && make \
 && echo -e $COLOR1 \
