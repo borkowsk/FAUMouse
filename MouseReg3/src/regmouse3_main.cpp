@@ -1,4 +1,4 @@
-/// This file is a part of Fasada toolbox
+/// This application is based on Fasada toolbox
 /// ---------------------------------------------------
 /// @author Wojciech Borkowski <wborkowsk@gmail.com>
 /// @footnote Technical mail: <fasada.wb@gmail.com>
