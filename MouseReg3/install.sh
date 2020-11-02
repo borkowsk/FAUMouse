@@ -1,5 +1,5 @@
 #!/bin/bash
-# This file is a part of MouseReg3
+# This file is a part of MouseReg3 PROTOTYPE VERSION
 # ---------------------------------------------------
 FAUMOUSEVERSION="3 (2020.07.22)"
 #

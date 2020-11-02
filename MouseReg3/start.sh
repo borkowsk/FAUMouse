@@ -1,4 +1,11 @@
 #!/bin/bash
+# **FAUMouse3 is a package for recording mouse movement on the screen via the web**
+#
+#__THIS IS BETA VERSION FOR PRIVATE USAGE__
+#
+#2020 (c) Wojciech Borkowski
+#
+
 BROWSER=firefox #Select proper LOCAL browser, NOT Chrome!!!
 MYADDRES=localhost #For debbuging only!
 MYPORT=8889     #Select the proper PORT for testing, when 8889 is not available

@@ -1,5 +1,7 @@
 **FAUMouse3 is a package for recording mouse movement on the screen via the web**
 
+__THIS IS BETA VERSION FOR PRIVATE USAGE__
+
 The tool consists of a server part and a browser part:
 - On the server side there are two programs written in C++ - *wwwserver* and *mousereg3*
 - On the client's side there is a program in JavaScript language with an overlay 
