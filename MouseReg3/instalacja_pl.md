@@ -1,5 +1,7 @@
 **FAUMouse3 jest pakietem do rejestracji ruchu myszy na ekranie za pośrednictwem WWW.**
 
+__UWAGA! TO TYLKO PROTOTYP__
+
 Narzędzie składa się z części serwerowej i części przeglądarkowej:
 - Po stronie serwera działają dwa programy napisane w C++ - *wwwserver* i *mousereg3* 
 - Po stronie klienta działa program w jezyku JavaScript z nakładką w postaci biblioteki *P5.min.js* z Processingu
