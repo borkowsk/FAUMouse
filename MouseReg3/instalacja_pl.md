@@ -1,4 +1,5 @@
 **FAUMouse3 jest pakietem do rejestracji ruchu myszy na ekranie za pośrednictwem WWW.**
+
 __UWAGA! TO TYLKO PROTOTYP__
 
 Narzędzie składa się z części serwerowej i części przeglądarkowej:
