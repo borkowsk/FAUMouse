@@ -10,7 +10,7 @@ git clone --recursive --recurse-submodules https://github.com/borkowsk/FAUMouse.
 
 **Paper:**
 
-* Nowak,A.,Vallacher,R.R.,Tesser,A.,&Borkowski,W.(2000).Societyofself: Theemergenceofcollectivepropertiesinself-structure.PsychologicalReview,39,39-61.
+* Nowak,A.,Vallacher,R.R.,Tesser,A.,&Borkowski,W.(2000). Society of self: The emergence of collective properties in self-structure. PsychologicalReview,39,39-61.
 
 * ...
 
