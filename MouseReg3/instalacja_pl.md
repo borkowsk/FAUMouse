@@ -16,7 +16,7 @@ Do uruchomienia niezbędne są następujące pakiety:
 - Processing.org z trybem P5 do edycji i testowania zmian w skrypcie zbierającym dane (opcjonalnie)
 
 *Na UBUNTU instalacja koniecznych pakietów wygląda następująco:*
-
+```
 sudo apt-get install git
 
 sudo apt-get install cmake
@@ -24,15 +24,15 @@ sudo apt-get install cmake
 sudo apt-get install libboost-all-dev
 
 sudo apt-get install libmagic-dev
-
+```
 *i ewentualnie make i g++:*
-
+```
 sudo apt-get update
 
 sudo apt-get install build-essential
 
 sudo apt-get install g++
-
+```
 *Katalog instalacyjny zawiera:*
 
 - instalacja_pl.md - _ten plik_
@@ -54,27 +54,27 @@ sudo apt-get install g++
 Sposób działania:
 
 1) Uruchomić:
-
+```
 ./install.sh
-
+```
 Jeśli dojdzie do końca to wyświetli adresy IP, które mogą zostać użyte
 
 2) Uruchomić 
-
+```
 ./start.sh
-
+```
 Uruchomi się serwis w wersji lokalnej. Powinno pojawić się okno przeglądarki ze stroną z katalogu `./public/` , która zawiera link do aplikacji rejestrującej. Jeśli rejestracja zadziała to w katalogu `./private/` powinien pojawić się jakiś plik `mouse*.raw` 
 
 3) Uruchomić 
-
+```
 ./stop.sh
-
+```
 Serwis lokalny zostanie zamknięty, a w oknie przeglądarki pojawi się odpowiednia informacja na ten temat
 
 4) Uruchomić serwis z parametrami: IP serwisu i PORT. Trzeba wybrać odpowiednie IP!!! Numer portu w zasadzie dowolny, byle czterocyfrowy. Poniżej przykład wywołania z IP mojego laptopa W SIECI LOKALNEJ.
-
+```
 ./start.sh  192.168.1.104 8888
-
+```
 Jeśli wybrane IP będzie dostępne globalnie lub mapowane to serwis powinien działać przynajmniej na przeglądarce `Firefox`.
 
 **Aktualnie przetestowano poprawne działanie serwisu na platformie `UBUNTU 16.04` i `18.04` i klienta w sieci lokalnej na przeglądarce `Firefox` w systemie UBUNTU oraz klienta na `Windows`. Wykryto niepoprawne działanie na przeglądarce `Chrome`, która wydaje się nie przesyłać danych, a jedynie ich nagłówek**
